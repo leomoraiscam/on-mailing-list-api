@@ -1,6 +1,6 @@
 import { Email } from "@/entities/email";
 
-describe('Email validation', () => {
+describe('Email domain class', () => {
   it('should not accept null strings', () => {
     const email = null;
 
@@ -14,7 +14,7 @@ describe('Email validation', () => {
   })
 
   it('should accept valid email', () => {
-    const email: string = 'any@email.com';
+    const email: string = 'local@domain.com';
 
     expect(Email.validate(email)).toBeTruthy();
   })
@@ -44,37 +44,37 @@ describe('Email validation', () => {
   })
 
   it('should not accept empty domain part', () => {
-    const email: string = `any@`;
+    const email: string = `@`;
 
     expect(Email.validate(email)).toBeFalsy();
   })
 
   it('should not accept domain with a part larger than 63 chars', () => {
-    const email: string = `${'any@'}${'d'.repeat(64)}.com`;
+    const email: string = `${'local@'}${'d'.repeat(64)}.com`;
 
     expect(Email.validate(email)).toBeFalsy();
   })
 
   it('should not accept local part with invalid char', () => {
-    const email: string = 'any email@email.com';
+    const email: string = 'local part@email.com';
 
     expect(Email.validate(email)).toBeFalsy();
   })
 
   it('should not accept local part with two dots', () => {
-    const email: string = 'any..email@email.com';
+    const email: string = 'local..email@domain.com';
 
     expect(Email.validate(email)).toBeFalsy();
   })
 
   it('should not accept local part with ending dot', () => {
-    const email: string = 'any_email.@email.com';
+    const email: string = 'local_dot.@email.com';
 
     expect(Email.validate(email)).toBeFalsy();
   })
 
   it('should not accept email without an at-sign', () => {
-    const email: string = 'anyemail.com';
+    const email: string = 'localDomain.com';
 
     expect(Email.validate(email)).toBeFalsy();
   })
