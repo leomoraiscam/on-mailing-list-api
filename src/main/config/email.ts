@@ -1,4 +1,4 @@
-import { EmailOptions } from '@/usecases/send-email/ports/email-service';
+import { EmailOptions } from '@/dtos/email-options';
 
 const attachments = [{
   filename: 'clean-architecture.pdf',

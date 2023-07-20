@@ -1,4 +1,4 @@
-import { EmailOptions } from "@/usecases/send-email/ports/email-service"
+import { EmailOptions } from "@/dtos/email-options"
 
 export const emailData = {
   attachmentFilePath: '../../../tmp/text.txt',

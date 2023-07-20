@@ -2,7 +2,8 @@ import { User } from '@/entities/user';
 import { Either } from '@/shared/either';
 import { MailServiceError } from '../errors/mail-service-error';
 import { UseCase } from '../ports/use-case';
-import { EmailOptions, EmailService } from './ports/email-service';
+import { EmailService } from './ports/email-service';
+import { EmailOptions } from "@/dtos/email-options"
 
 export class SendEmailUseCase implements UseCase {
   private readonly emailOptions: EmailOptions;
