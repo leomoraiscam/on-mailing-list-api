@@ -16,29 +16,31 @@ import { Either, right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
 
 describe('Register user web controller', () => {
-  const attachmentFilePath = '../resources/text.txt'
-  const fromName = 'Test'
-  const fromEmail = 'from_email@mail.com'
-  const toName = 'any_name'
-  const toEmail = 'any_email@mail.com'
-  const subject = 'Test e-mail'
-  const emailBody = 'Hello world attachment test'
-  const emailBodyHtml = '<b>Hello world attachment test</b>'
-  const attachment = [{
-    filename: attachmentFilePath,
-    contentType: 'text/plain'
-  }]
+  const attachmentFilePath = '../resources/text.txt';
+  const fromName = 'MailingList';
+  const fromEmail = 'mainling_list_contact@mail.com';
+  const toName = 'John Doe';
+  const toEmail = 'jonh_doe@mail.com';
+  const subject = 'Test e-mail';
+  const emailBody = 'Hello world attachment test';
+  const emailBodyHTML = '<b>Hello world attachment test</b>';
+  const attachment = [
+    {
+      filename: attachmentFilePath,
+      contentType: 'text/plain',
+    },
+  ];
 
   const mailOptions: EmailOptions = {
-    host: 'test',
-    port: 867,
-    username: 'test',
-    password: 'test',
+    host: 'localhost',
+    port: 8671,
+    username: 'fakeMailConfiguration',
+    password: '123456',
     from: fromName + ' ' + fromEmail,
     to: toName + '<' + toEmail + '>',
     subject: subject,
     text: emailBody,
-    html: emailBodyHtml,
+    html: emailBodyHTML,
     attachments: attachment
   }
 
@@ -55,24 +57,24 @@ describe('Register user web controller', () => {
   }
   
   const users: UserData[] = [];
-  const repository: UserRepository = new InMemoryUserRepository(users);
-  const registerUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repository)
-  const mailServiceStub = new MailServiceStub()
+  const userRepository: UserRepository = new InMemoryUserRepository(users);
+  const registerUserOnMailingList: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepository);
+  const mailServiceStub = new MailServiceStub();
   const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceStub)
-  const registerAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
-    new RegisterUserAndSendEmailUseCase(registerUseCase, sendEmailUseCase)
-  const controller: RegisterUserAndSendEmailController = new RegisterUserAndSendEmailController(registerAndSendEmailUseCase)
+  const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
+    new RegisterUserAndSendEmailUseCase(registerUserOnMailingList, sendEmailUseCase)
+  const registerUserAndSendEmailController: RegisterUserAndSendEmailController = new RegisterUserAndSendEmailController(registerUserAndSendEmailUseCase)
   const errorThrowingUseCaseStub: UseCase = new ErrorThrowingUseCaseStub();
 
   it('should return status code 201 when request contains valid user data', async () => {
     const request: HttpRequest = {
       body: {
-        name: 'any name',
-        email: 'any@email.com',
+        name: 'John Doe',
+        email: 'john_doe@email.com',
       },
     };
 
-    const response: HttpResponse = await controller.handle(request);
+    const response: HttpResponse = await registerUserAndSendEmailController.handle(request);
 
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(request.body);
@@ -82,11 +84,11 @@ describe('Register user web controller', () => {
     const requestWithInvalidName: HttpRequest = {
       body: {
         name: 'A',
-        email: 'any@email.com',
+        email: 'john_doe@email.com',
       },
     };
 
-    const response: HttpResponse = await controller.handle(
+    const response: HttpResponse = await registerUserAndSendEmailController.handle(
       requestWithInvalidName
     );
 
@@ -97,12 +99,12 @@ describe('Register user web controller', () => {
   it('should return status code 400 when request contains invalid user email', async () => {
     const requestWithInvalidEmail: HttpRequest = {
       body: {
-        name: 'Any',
-        email: 'anyemail.com',
+        name: 'John Doe',
+        email: 'johnDoe.com',
       },
     };
 
-    const response: HttpResponse = await controller.handle(
+    const response: HttpResponse = await registerUserAndSendEmailController.handle(
       requestWithInvalidEmail
     );
 
@@ -113,11 +115,11 @@ describe('Register user web controller', () => {
   it('should return status code 400 when request is missing user name', async () => {
     const requestMissingName: HttpRequest = {
       body: {
-        email: 'anyemail.com',
+        email: 'john_doe@email.com',
       },
     };
 
-    const response: HttpResponse = await controller.handle(requestMissingName);
+    const response: HttpResponse = await registerUserAndSendEmailController.handle(requestMissingName);
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(MissingParamError);
@@ -129,11 +131,11 @@ describe('Register user web controller', () => {
   it('should return status code 400 when request is missing user email', async () => {
     const requestMissingEmail: HttpRequest = {
       body: {
-        name: 'any',
+        name: 'John Doe',
       },
     };
 
-    const response: HttpResponse = await controller.handle(requestMissingEmail);
+    const response: HttpResponse = await registerUserAndSendEmailController.handle(requestMissingEmail);
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(MissingParamError);
@@ -147,7 +149,7 @@ describe('Register user web controller', () => {
       body: {},
     };
 
-    const response: HttpResponse = await controller.handle(
+    const response: HttpResponse = await registerUserAndSendEmailController.handle(
       requestMissingNameAndEmail
     );
 
@@ -161,8 +163,8 @@ describe('Register user web controller', () => {
   it('should return status code 500 when server raises', async () => {
     const request: HttpRequest = {
       body: {
-        name: 'Any name',
-        email: 'any@email.com',
+        name: 'John Doe',
+        email: 'john_doe@email.com',
       },
     };
 
