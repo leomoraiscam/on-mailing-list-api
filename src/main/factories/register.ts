@@ -6,7 +6,7 @@ import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { RegisterUserAndSendEmailController } from '@/web-controllers/register-user-and-send-email-controller';
 import { getEmailOptions } from '../config/email';
 
-export const makeRegisterUserAndSendUserController = (): RegisterUserAndSendEmailController => {
+export const makeRegisterUserAndSendEmailController = (): RegisterUserAndSendEmailController => {
   const mongodbUserRepository = new MongodbUserRepository()
   const emailService = new NodemailerEmailService();
   const registerUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(mongodbUserRepository);
