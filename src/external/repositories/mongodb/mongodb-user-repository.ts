@@ -1,6 +1,5 @@
 import { UserData } from '@/dtos/user-data';
 import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
-
 import { mongoHelper } from './helpers/mongo-helper';
 
 export class MongodbUserRepository implements UserRepository {
@@ -34,12 +33,10 @@ export class MongodbUserRepository implements UserRepository {
     const exists = await this.exists(user);
     
     if (!exists) {
-      const userClone: UserData = {
+      await userCollection.insertOne({
         name: user.name,
         email: user.email,
-      };
-
-      await userCollection.insertOne(userClone);
+      });
     }
   }
 }
