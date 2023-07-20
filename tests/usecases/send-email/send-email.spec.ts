@@ -3,7 +3,7 @@ import { Right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
 import {
   EmailOptions,
-} from '@/usecases/send-email/ports/email-service';
+} from '@/dtos/email-options';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { mailOptions, emailData } from '../../fixtures/stubs/email-options-stub';
 import { MailServiceErrorStub } from "../../fixtures/stubs/mail-service-error-stub";
