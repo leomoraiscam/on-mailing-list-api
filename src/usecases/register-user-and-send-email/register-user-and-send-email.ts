@@ -3,13 +3,12 @@ import { InvalidNameError } from '@/entities/errors/invalid-name-error';
 import { User } from '@/entities/user';
 import { UserData } from '@/dtos/user-data';
 import { Either, left, right } from '@/shared/either';
-
 import { MailServiceError } from '../errors/mail-service-error';
 import { UseCase } from '../ports/use-case';
 import { RegisterUserOnMailingList } from '../register-user-on-mailing-list/register-user-on-mailing-list';
 import { SendEmail } from '../send-email/send-email';
 
-export class RegisterAndSendEmail implements UseCase {
+export class RegisterUserAndSendEmailUseCase implements UseCase {
   private registerUserOnMailingList: RegisterUserOnMailingList;
   private sendEmail: SendEmail;
 
