@@ -13,10 +13,10 @@ import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list
 
 describe('Register and send email to user use case', () => {
   const attachmentFilePath = '../resources/text.txt';
-  const fromName = 'Test';
-  const fromEmail = 'from_mail@mail.com';
-  const toName = 'anyName';
-  const toEmail = 'any_email@mail.com';
+  const fromName = 'MailingList';
+  const fromEmail = 'mainling_list_contact@mail.com';
+  const toName = 'John Doe';
+  const toEmail = 'jonh_doe@mail.com';
   const subject = 'Test e-mail';
   const emailBody = 'Hello world attachment test';
   const emailBodyHTML = '<b>Hello world attachment test</b>';
@@ -28,17 +28,17 @@ describe('Register and send email to user use case', () => {
   ];
 
   const mailOptions: EmailOptions = {
-    host: 'test',
-    port: 867,
-    username: 'test',
-    password: 'test',
-    from: `${fromName} ${fromEmail}`,
-    to: `${toName}<${toEmail}>`,
-    subject,
+    host: 'localhost',
+    port: 8671,
+    username: 'fakeMailConfiguration',
+    password: '123456',
+    from: fromName + ' ' + fromEmail,
+    to: toName + '<' + toEmail + '>',
+    subject: subject,
     text: emailBody,
     html: emailBodyHTML,
-    attachments: attachment,
-  };
+    attachments: attachment
+  }
 
   class MailServiceMock implements EmailService {
     public timesSendWasCalled = 0;
@@ -53,54 +53,60 @@ describe('Register and send email to user use case', () => {
   }
 
   it('should add user with complete data to mailing list', async () => {
-    const users: UserData[] = []
-    const repo: UserRepository = new InMemoryUserRepository(users)
-    const registerUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repo)
-    const mailServiceMock = new MailServiceMock()
-    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock)
-    const registerAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
-      new RegisterUserAndSendEmailUseCase(registerUseCase, sendEmailUseCase)
+    const users: UserData[] = [];
+    const userRepository: UserRepository = new InMemoryUserRepository(users);
+    const registerUserOnMailingListUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepository);
+    const mailServiceMock = new MailServiceMock();
+    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock);
+    const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
+      new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase);
     
-    const name = 'any_name'
-    const email = 'any@email.com'
-    
-    const response: UserData = (await registerAndSendEmailUseCase.perform({ name, email })).value as UserData
+    const data = {
+      name: 'John Doe',
+      email: 'jonh_doe@email.com'
+    };
+
+    const response: UserData = (await registerUserAndSendEmailUseCase.perform({ ...data })).value as UserData;
         
-    expect(response.name).toBe('any_name')
-    expect(mailServiceMock.timesSendWasCalled).toEqual(1)
+    expect(response.name).toBe('John Doe');
+    expect(mailServiceMock.timesSendWasCalled).toEqual(1);
   });
 
   it('should not register user and send him/her an email with invalid email', async () => {
-    const users: UserData[] = []
-    const repo: UserRepository = new InMemoryUserRepository(users)
-    const registerUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repo)
-    const mailServiceMock = new MailServiceMock()
-    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock)
-    const registerAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
-      new RegisterUserAndSendEmailUseCase(registerUseCase, sendEmailUseCase)
+    const users: UserData[] = [];
+    const userRepository: UserRepository = new InMemoryUserRepository(users);
+    const registerUserOnMailingListUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepository);
+    const mailServiceMock = new MailServiceMock();
+    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock);
+    const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
+      new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase);
     
-    const name = 'any_name'
-    const invalidEmail = 'invalid_email'
+    const data = {
+      name: 'John Doe',
+      email: 'jonh_doeemail.com'
+    };
 
-    const response = (await registerAndSendEmailUseCase.perform({ name: name, email: invalidEmail })).value as Error
+    const response = (await registerUserAndSendEmailUseCase.perform({ ...data })).value as Error;
     
-    expect(response.name).toEqual('InvalidEmailError')
+    expect(response.name).toEqual('InvalidEmailError');
   })
 
   it('should not register user and send him/her an email with invalid name', async () => {
-    const users: UserData[] = []
-    const repo: UserRepository = new InMemoryUserRepository(users)
-    const registerUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repo)
-    const mailServiceMock = new MailServiceMock()
-    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock)
-    const registerAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
-      new RegisterUserAndSendEmailUseCase(registerUseCase, sendEmailUseCase)
+    const users: UserData[] = [];
+    const userRepository: UserRepository = new InMemoryUserRepository(users);
+    const registerUserOnMailingList: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepository);
+    const mailServiceMock = new MailServiceMock();
+    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock);
+    const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
+      new RegisterUserAndSendEmailUseCase(registerUserOnMailingList, sendEmailUseCase);
     
-    const invalidName = 'a'
-    const email = 'any@mail.com'
+    const data = {
+      name: 'a',
+      email: 'jonh_doe@email.com'
+    };
 
-    const response = (await registerAndSendEmailUseCase.perform({ name: invalidName, email: email })).value as Error
+    const response = (await registerUserAndSendEmailUseCase.perform({ ...data })).value as Error;
     
-    expect(response.name).toEqual('InvalidNameError')
+    expect(response.name).toEqual('InvalidNameError');
   })
 });

@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import { User } from '@/entities/user';
 import { Either, Right, left, right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
@@ -9,11 +8,11 @@ import {
 import { SendEmail } from '@/usecases/send-email/send-email';
 
 describe('Register and send email to user use case', () => {
-  const attachmentFilePath = '../../../tmp/resources/text.txt';
-  const fromName = 'Test';
-  const fromEmail = 'from_mail@mail.com';
-  const toName = 'anyName';
-  const toEmail = 'any_email@mail.com';
+  const attachmentFilePath = '../resources/text.txt';
+  const fromName = 'MailingList';
+  const fromEmail = 'mainling_list_contact@mail.com';
+  const toName = 'John Doe';
+  const toEmail = 'jonh_doe@mail.com';
   const subject = 'Test e-mail';
   const emailBody = 'Hello world attachment test';
   const emailBodyHTML = '<b>Hello world attachment test</b>';
@@ -25,17 +24,17 @@ describe('Register and send email to user use case', () => {
   ];
 
   const mailOptions: EmailOptions = {
-    host: 'test',
-    port: 867,
-    username: 'test',
-    password: 'test',
-    from: `${fromName} ${fromEmail}`,
-    to: `${toName}<${toEmail}>`,
-    subject,
+    host: 'localhost',
+    port: 8671,
+    username: 'fakeMailConfiguration',
+    password: '123456',
+    from: fromName + ' ' + fromEmail,
+    to: toName + '<' + toEmail + '>',
+    subject: subject,
     text: emailBody,
     html: emailBodyHTML,
-    attachments: attachment,
-  };
+    attachments: attachment
+  }
 
   class MailServiceStub implements EmailService {
     // Como se fosse o envio de e-mail em memoria
@@ -63,7 +62,6 @@ describe('Register and send email to user use case', () => {
 
   it('should email user with valid name and email address', async () => {
     const mailServiceStub = new MailServiceStub();
-
     const sendEmailUseCase = new SendEmail(mailOptions, mailServiceStub);
 
     const user = User.create({ name: toName, email: toEmail }).value as User;
@@ -77,7 +75,6 @@ describe('Register and send email to user use case', () => {
 
   it('should return error when email service fails', async () => {
     const mailServiceErrorStub = new MailServiceErrorStub();
-
     const sendEmailUseCase = new SendEmail(mailOptions, mailServiceErrorStub);
 
     const user = User.create({ name: toName, email: toEmail }).value as User;

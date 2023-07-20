@@ -7,20 +7,24 @@ import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list
 describe('Register user on mailing list use case', () => {
   it('should add user with complete data to mailing list', async () => {
     const users: UserData[] = [];
-    const repository: UserRepository = new InMemoryUserRepository(users);
-    const usecase: RegisterUserOnMailingList = new RegisterUserOnMailingList(
-      repository
+    const userRepository: UserRepository = new InMemoryUserRepository(users);
+    const registerUserOnMailingList: RegisterUserOnMailingList = new RegisterUserOnMailingList(
+      userRepository
     );
-    const name = 'any_name';
-    const email = 'any_email@email.com';
+  
+    const data = {
+     name: 'John Doe',
+     email: 'john_doe@email.com'
+    }
 
-    const user = User.create({ name, email }).value as User;
+    const user = User.create({ ...data }).value as User;
 
-    const response = await usecase.perform(user);
+    const response = await registerUserOnMailingList.perform(user);
 
-    const addedUser = repository.findUserByEmail(email);
+    const { email } = data;
+    const addedUser = userRepository.findUserByEmail(email);
 
-    expect((await addedUser).name).toBe('any_name');
-    expect(response.name).toBe('any_name');
+    expect((await addedUser).name).toBe('John Doe');
+    expect(response.name).toBe('John Doe');
   });
 });
