@@ -3,7 +3,7 @@ import { UserData } from '@/dtos/user-data';
 import { UserRepository } from './ports/user-repository';
 import { UseCase } from '../ports/use-case';
 
-export class RegisterUserOnMailingList implements UseCase {
+export class RegisterUserOnMailingListUseCase implements UseCase {
   private readonly repository: UserRepository;
 
   public constructor(repository: UserRepository) {

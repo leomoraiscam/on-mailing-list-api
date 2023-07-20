@@ -5,19 +5,19 @@ import { UserData } from '@/dtos/user-data';
 import { Either, left, right } from '@/shared/either';
 import { MailServiceError } from '../errors/mail-service-error';
 import { UseCase } from '../ports/use-case';
-import { RegisterUserOnMailingList } from '../register-user-on-mailing-list/register-user-on-mailing-list';
-import { SendEmail } from '../send-email/send-email';
+import { RegisterUserOnMailingListUseCase } from '../register-user-on-mailing-list/register-user-on-mailing-list-use-case';
+import { SendEmailUseCase } from '../send-email/send-email-use-case';
 
 export class RegisterUserAndSendEmailUseCase implements UseCase {
-  private registerUserOnMailingList: RegisterUserOnMailingList;
-  private sendEmail: SendEmail;
+  private registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
+  private sendEmailUseCase: SendEmailUseCase;
 
   constructor(
-    registerUserOnMailingList: RegisterUserOnMailingList,
-    sendEmail: SendEmail
+    registerUserOnMailingList: RegisterUserOnMailingListUseCase,
+    sendEmail: SendEmailUseCase
   ) {
-    this.registerUserOnMailingList = registerUserOnMailingList;
-    this.sendEmail = sendEmail;
+    this.registerUserOnMailingListUseCase = registerUserOnMailingList;
+    this.sendEmailUseCase = sendEmail;
   }
 
   async perform(
@@ -34,9 +34,9 @@ export class RegisterUserAndSendEmailUseCase implements UseCase {
 
     const user: User = userOrError.value;
 
-    await this.registerUserOnMailingList.perform(user);
+    await this.registerUserOnMailingListUseCase.perform(user);
     
-    const result = await this.sendEmail.perform(user);
+    const result = await this.sendEmailUseCase.perform(user);
 
     if (result.isLeft()) {
       return left(result.value);

@@ -4,7 +4,7 @@ import { MailServiceError } from '../errors/mail-service-error';
 import { UseCase } from '../ports/use-case';
 import { EmailOptions, EmailService } from './ports/email-service';
 
-export class SendEmail implements UseCase {
+export class SendEmailUseCase implements UseCase {
   private readonly emailOptions: EmailOptions;
   private readonly emailService: EmailService;
 
