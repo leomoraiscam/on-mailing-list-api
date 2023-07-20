@@ -11,60 +11,28 @@ import { RegisterUserAndSendEmailController } from '@/web-controllers/register-u
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
-import { EmailOptions, EmailService } from '@/usecases/send-email/ports/email-service';
-import { Either, right } from '@/shared/either';
-import { MailServiceError } from '@/usecases/errors/mail-service-error';
+import { mailOptions } from '../fixtures/stubs/email-options-stub';
+import { MailServiceStub } from '../fixtures/stubs/mail-service-stub';
+import { ErrorThrowingUseCaseStub } from '../fixtures/stubs/error-throwing-stub';
 
 describe('Register user web controller', () => {
-  const attachmentFilePath = '../resources/text.txt';
-  const fromName = 'MailingList';
-  const fromEmail = 'mainling_list_contact@mail.com';
-  const toName = 'John Doe';
-  const toEmail = 'jonh_doe@mail.com';
-  const subject = 'Test e-mail';
-  const emailBody = 'Hello world attachment test';
-  const emailBodyHTML = '<b>Hello world attachment test</b>';
-  const attachment = [
-    {
-      filename: attachmentFilePath,
-      contentType: 'text/plain',
-    },
-  ];
+  let users: UserData[];
+  let userRepository: UserRepository;
+  let registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
+  let mailServiceStub: MailServiceStub;
+  let sendEmailUseCase: SendEmailUseCase;
+  let registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
+  let registerUserAndSendEmailController: RegisterUserAndSendEmailController;
 
-  const mailOptions: EmailOptions = {
-    host: 'localhost',
-    port: 8671,
-    username: 'fakeMailConfiguration',
-    password: '123456',
-    from: fromName + ' ' + fromEmail,
-    to: toName + '<' + toEmail + '>',
-    subject: subject,
-    text: emailBody,
-    html: emailBodyHTML,
-    attachments: attachment
-  }
-
-  class ErrorThrowingUseCaseStub implements UseCase {
-    perform(request: any): Promise<void> {
-      throw Error();
-    }
-  }
-    
-  class MailServiceStub implements EmailService {
-    async send (emailOptions: EmailOptions): Promise<Either<MailServiceError, EmailOptions>> {
-      return right(emailOptions)
-    }
-  }
-  
-  const users: UserData[] = [];
-  const userRepository: UserRepository = new InMemoryUserRepository(users);
-  const registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(userRepository);
-  const mailServiceStub = new MailServiceStub();
-  const sendEmailUseCase: SendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceStub)
-  const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
-    new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase)
-  const registerUserAndSendEmailController: RegisterUserAndSendEmailController = new RegisterUserAndSendEmailController(registerUserAndSendEmailUseCase)
-  const errorThrowingUseCaseStub: UseCase = new ErrorThrowingUseCaseStub();
+  beforeEach(() => {
+    users = [];
+    userRepository = new InMemoryUserRepository(users);
+    registerUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(userRepository);
+    mailServiceStub = new MailServiceStub();
+    sendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceStub)
+    registerUserAndSendEmailUseCase = new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase)
+    registerUserAndSendEmailController = new RegisterUserAndSendEmailController(registerUserAndSendEmailUseCase)
+  })
 
   it('should return status code 201 when request contains valid user data', async () => {
     const request: HttpRequest = {
@@ -161,6 +129,8 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 500 when server raises', async () => {
+    const errorThrowingUseCaseStub: UseCase = new ErrorThrowingUseCaseStub();
+
     const request: HttpRequest = {
       body: {
         name: 'John Doe',

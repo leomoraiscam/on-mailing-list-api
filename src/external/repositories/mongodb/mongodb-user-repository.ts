@@ -12,9 +12,7 @@ export class MongodbUserRepository implements UserRepository {
   async findUserByEmail(email: string): Promise<UserData> {
     const userCollection = mongoHelper.getCollection('users');
     
-    const result = await userCollection.findOne<UserData>({ email });
-    
-    return result;
+    return userCollection.findOne<UserData>({ email });
   }
 
   async exists(user: UserData): Promise<boolean> {

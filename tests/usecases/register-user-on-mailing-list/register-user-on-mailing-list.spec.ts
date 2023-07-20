@@ -15,7 +15,7 @@ describe('Register user on mailing list use case', () => {
     const data = {
      name: 'John Doe',
      email: 'john_doe@email.com'
-    }
+    };
 
     const user = User.create({ ...data }).value as User;
 
