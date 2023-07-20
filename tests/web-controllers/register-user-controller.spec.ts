@@ -10,7 +10,7 @@ import { HttpResponse } from '@/web-controllers/ports/http-response';
 import { RegisterUserAndSendEmailController } from '@/web-controllers/register-user-and-send-email-controller';
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 import { SendEmail } from '@/usecases/send-email/send-email';
-import { RegisterAndSendEmail } from '@/usecases/register-and-send-email/register-and-send-email';
+import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email';
 import { EmailOptions, EmailService } from '@/usecases/send-email/ports/email-service';
 import { Either, right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
@@ -59,8 +59,8 @@ describe('Register user web controller', () => {
   const registerUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repository)
   const mailServiceStub = new MailServiceStub()
   const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceStub)
-  const registerAndSendEmailUseCase: RegisterAndSendEmail =
-    new RegisterAndSendEmail(registerUseCase, sendEmailUseCase)
+  const registerAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
+    new RegisterUserAndSendEmailUseCase(registerUseCase, sendEmailUseCase)
   const controller: RegisterUserAndSendEmailController = new RegisterUserAndSendEmailController(registerAndSendEmailUseCase)
   const errorThrowingUseCaseStub: UseCase = new ErrorThrowingUseCaseStub();
 

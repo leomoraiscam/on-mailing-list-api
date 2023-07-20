@@ -1,16 +1,15 @@
 import { UserData } from '@/dtos/user-data';
 import { Either, right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
-import { RegisterAndSendEmail } from '@/usecases/register-and-send-email/register-and-send-email';
+import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email';
 import { RegisterUserOnMailingList } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list';
 import {
   EmailOptions,
   EmailService,
 } from '@/usecases/send-email/ports/email-service';
 import { SendEmail } from '@/usecases/send-email/send-email';
-
-import { UserRepository } from '../../../src/usecases/register-user-on-mailing-list/ports/user-repository';
-import { InMemoryUserRepository } from '../../../src/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
+import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
+import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 
 describe('Register and send email to user use case', () => {
   const attachmentFilePath = '../resources/text.txt';
@@ -59,8 +58,8 @@ describe('Register and send email to user use case', () => {
     const registerUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repo)
     const mailServiceMock = new MailServiceMock()
     const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock)
-    const registerAndSendEmailUseCase: RegisterAndSendEmail =
-      new RegisterAndSendEmail(registerUseCase, sendEmailUseCase)
+    const registerAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
+      new RegisterUserAndSendEmailUseCase(registerUseCase, sendEmailUseCase)
     
     const name = 'any_name'
     const email = 'any@email.com'
@@ -77,8 +76,8 @@ describe('Register and send email to user use case', () => {
     const registerUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repo)
     const mailServiceMock = new MailServiceMock()
     const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock)
-    const registerAndSendEmailUseCase: RegisterAndSendEmail =
-      new RegisterAndSendEmail(registerUseCase, sendEmailUseCase)
+    const registerAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
+      new RegisterUserAndSendEmailUseCase(registerUseCase, sendEmailUseCase)
     
     const name = 'any_name'
     const invalidEmail = 'invalid_email'
@@ -94,8 +93,8 @@ describe('Register and send email to user use case', () => {
     const registerUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(repo)
     const mailServiceMock = new MailServiceMock()
     const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock)
-    const registerAndSendEmailUseCase: RegisterAndSendEmail =
-      new RegisterAndSendEmail(registerUseCase, sendEmailUseCase)
+    const registerAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
+      new RegisterUserAndSendEmailUseCase(registerUseCase, sendEmailUseCase)
     
     const invalidName = 'a'
     const email = 'any@mail.com'
