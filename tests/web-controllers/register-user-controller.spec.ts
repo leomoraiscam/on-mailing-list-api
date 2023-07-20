@@ -3,14 +3,14 @@ import { InvalidNameError } from '@/entities/errors/invalid-name-error';
 import { UserData } from '@/dtos/user-data';
 import { UseCase } from '@/usecases/ports/use-case';
 import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
-import { RegisterUserOnMailingList } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list';
+import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import { MissingParamError } from '@/web-controllers/errors/missing-param-error';
 import { HttpRequest } from '@/web-controllers/ports/http-request';
 import { HttpResponse } from '@/web-controllers/ports/http-response';
 import { RegisterUserAndSendEmailController } from '@/web-controllers/register-user-and-send-email-controller';
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
-import { SendEmail } from '@/usecases/send-email/send-email';
-import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email';
+import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
+import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
 import { EmailOptions, EmailService } from '@/usecases/send-email/ports/email-service';
 import { Either, right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
@@ -58,11 +58,11 @@ describe('Register user web controller', () => {
   
   const users: UserData[] = [];
   const userRepository: UserRepository = new InMemoryUserRepository(users);
-  const registerUserOnMailingList: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepository);
+  const registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(userRepository);
   const mailServiceStub = new MailServiceStub();
-  const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceStub)
+  const sendEmailUseCase: SendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceStub)
   const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
-    new RegisterUserAndSendEmailUseCase(registerUserOnMailingList, sendEmailUseCase)
+    new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase)
   const registerUserAndSendEmailController: RegisterUserAndSendEmailController = new RegisterUserAndSendEmailController(registerUserAndSendEmailUseCase)
   const errorThrowingUseCaseStub: UseCase = new ErrorThrowingUseCaseStub();
 

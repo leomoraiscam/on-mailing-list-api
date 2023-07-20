@@ -1,13 +1,13 @@
 import { UserData } from '@/dtos/user-data';
 import { Either, right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
-import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email';
-import { RegisterUserOnMailingList } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list';
+import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
+import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import {
   EmailOptions,
   EmailService,
 } from '@/usecases/send-email/ports/email-service';
-import { SendEmail } from '@/usecases/send-email/send-email';
+import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 
@@ -55,9 +55,9 @@ describe('Register and send email to user use case', () => {
   it('should add user with complete data to mailing list', async () => {
     const users: UserData[] = [];
     const userRepository: UserRepository = new InMemoryUserRepository(users);
-    const registerUserOnMailingListUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepository);
+    const registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(userRepository);
     const mailServiceMock = new MailServiceMock();
-    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock);
+    const sendEmailUseCase: SendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceMock);
     const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
       new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase);
     
@@ -75,9 +75,9 @@ describe('Register and send email to user use case', () => {
   it('should not register user and send him/her an email with invalid email', async () => {
     const users: UserData[] = [];
     const userRepository: UserRepository = new InMemoryUserRepository(users);
-    const registerUserOnMailingListUseCase: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepository);
+    const registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(userRepository);
     const mailServiceMock = new MailServiceMock();
-    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock);
+    const sendEmailUseCase: SendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceMock);
     const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
       new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase);
     
@@ -94,11 +94,11 @@ describe('Register and send email to user use case', () => {
   it('should not register user and send him/her an email with invalid name', async () => {
     const users: UserData[] = [];
     const userRepository: UserRepository = new InMemoryUserRepository(users);
-    const registerUserOnMailingList: RegisterUserOnMailingList = new RegisterUserOnMailingList(userRepository);
+    const registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(userRepository);
     const mailServiceMock = new MailServiceMock();
-    const sendEmailUseCase: SendEmail = new SendEmail(mailOptions, mailServiceMock);
+    const sendEmailUseCase: SendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceMock);
     const registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase =
-      new RegisterUserAndSendEmailUseCase(registerUserOnMailingList, sendEmailUseCase);
+      new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase);
     
     const data = {
       name: 'a',

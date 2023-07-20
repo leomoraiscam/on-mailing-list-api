@@ -1,6 +1,6 @@
 import { User } from '@/entities/user';
 import { UserData } from '@/dtos/user-data';
-import { RegisterUserOnMailingList } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list';
+import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 
@@ -8,7 +8,7 @@ describe('Register user on mailing list use case', () => {
   it('should add user with complete data to mailing list', async () => {
     const users: UserData[] = [];
     const userRepository: UserRepository = new InMemoryUserRepository(users);
-    const registerUserOnMailingList: RegisterUserOnMailingList = new RegisterUserOnMailingList(
+    const registerUserOnMailingList: RegisterUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(
       userRepository
     );
   

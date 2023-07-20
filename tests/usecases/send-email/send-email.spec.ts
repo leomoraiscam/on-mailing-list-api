@@ -5,7 +5,7 @@ import {
   EmailOptions,
   EmailService,
 } from '@/usecases/send-email/ports/email-service';
-import { SendEmail } from '@/usecases/send-email/send-email';
+import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 
 describe('Register and send email to user use case', () => {
   const attachmentFilePath = '../resources/text.txt';
@@ -62,7 +62,7 @@ describe('Register and send email to user use case', () => {
 
   it('should email user with valid name and email address', async () => {
     const mailServiceStub = new MailServiceStub();
-    const sendEmailUseCase = new SendEmail(mailOptions, mailServiceStub);
+    const sendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceStub);
 
     const user = User.create({ name: toName, email: toEmail }).value as User;
 
@@ -75,7 +75,7 @@ describe('Register and send email to user use case', () => {
 
   it('should return error when email service fails', async () => {
     const mailServiceErrorStub = new MailServiceErrorStub();
-    const sendEmailUseCase = new SendEmail(mailOptions, mailServiceErrorStub);
+    const sendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceErrorStub);
 
     const user = User.create({ name: toName, email: toEmail }).value as User;
 
