@@ -1,7 +1,7 @@
 import { mongoHelper } from '@/external/repositories/mongodb/helpers/mongo-helper';
 import { MongodbUserRepository } from '@/external/repositories/mongodb/mongodb-user-repository';
 
-describe('MongoDb User repository', () => {
+describe('MongoDb user repository', () => {
   beforeAll(async () => {
     await mongoHelper.connect(process.env.MONGO_URL);
   });
@@ -18,8 +18,8 @@ describe('MongoDb User repository', () => {
     const userRepository = new MongodbUserRepository();
 
     const user = {
-      name: 'Any',
-      email: 'any@email.com',
+      name: 'John Doe',
+      email: 'john_doe@email.com',
     };
 
     await userRepository.add(user);
@@ -30,19 +30,20 @@ describe('MongoDb User repository', () => {
   it('should return all users added', async () => {
     const userRepository = new MongodbUserRepository();
 
-    await userRepository.add({
-      name: 'Any',
-      email: 'any@email.com',
-    });
-
-    await userRepository.add({
-      name: 'Any two',
-      email: 'any_two@email.com',
-    });
+    await Promise.all([
+      userRepository.add({
+        name: 'John Doe',
+        email: 'john_doe@email.com',
+      }),
+      userRepository.add({
+        name: 'John Smith',
+        email: 'john_smith@email.com',
+      })
+    ])
 
     const users = await userRepository.findAllUsers();
 
-    expect(users[0].name).toEqual('Any');
-    expect(users[1].name).toEqual('Any two');
+    expect(users[0].name).toEqual('John Doe');
+    expect(users[1].name).toEqual('John Smith');
   });
 });

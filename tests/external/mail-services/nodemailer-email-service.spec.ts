@@ -2,24 +2,24 @@ import { EmailOptions } from '@/usecases/send-email/ports/email-service'
 import { NodemailerEmailService } from '@/external/mail-services/nodemailer-email-service'
 import { MailServiceError } from '@/usecases/errors/mail-service-error'
 
-const attachmentFilePath = '../resources/text.txt'
-const fromName = 'Test'
-const fromEmail = 'from_email@mail.com'
-const toName = 'any_name'
-const toEmail = 'any_email@mail.com'
-const subject = 'Test e-mail'
-const emailBody = 'Hello world attachment test'
-const emailBodyHtml = '<b>Hello world attachment test</b>'
+const attachmentFilePath = '../resources/text.txt';
+const fromName = 'MailingList';
+const fromEmail = 'mainling_list_contact@mail.com';
+const toName = 'John Doe';
+const toEmail = 'jonh_doe@mail.com';
+const subject = 'Test e-mail';
+const emailBody = 'Hello world attachment test';
+const emailBodyHtml = '<b>Hello world attachment test</b>';
 const attachment = [{
   filename: attachmentFilePath,
   contentType: 'text/plain'
-}]
+}];
 
 const mailOptions: EmailOptions = {
-  host: 'test',
-  port: 867,
-  username: 'test',
-  password: 'test',
+  host: 'localhost',
+  port: 8671,
+  username: 'fakeMailConfiguration',
+  password: '123456',
   from: fromName + ' ' + fromEmail,
   to: toName + '<' + toEmail + '>',
   subject: subject,
