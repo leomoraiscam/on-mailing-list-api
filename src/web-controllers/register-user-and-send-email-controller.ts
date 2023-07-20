@@ -1,6 +1,5 @@
 import { UserData } from '@/dtos/user-data';
 import { UseCase } from '@/usecases/ports/use-case';
-
 import { MissingParamError } from './errors/missing-param-error';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
