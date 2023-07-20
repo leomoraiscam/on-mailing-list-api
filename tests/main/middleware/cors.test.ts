@@ -1,10 +1,10 @@
-import request from 'supertest'
-import app from '@/main/config/app'
+import request from 'supertest';
+import app from '@/main/config/app';
 
 describe('CORS Middleware', () => {
   test('should enable CORS', async () => {
-    app.post('/test_cors', (req, res) => {
-      res.send()
+    app.post('/test_cors', (_, response) => {
+      response.send()
     })
     await request(app)
       .get('/test_cors')
