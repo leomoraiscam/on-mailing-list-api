@@ -1,16 +1,22 @@
 import { HttpResponse } from "../ports/http-response";
 
-export const created = (data: any): HttpResponse => ({
-  statusCode: 201,
-  body: data
-})
+export function created<T>(data: T): HttpResponse<T> {
+  return {
+    statusCode: 201,
+    body: data
+  }
+}
 
-export const badRequest = (data: any): HttpResponse => ({
-  statusCode: 400,
-  body: data
-})
+export function badRequest<T>(data: T): HttpResponse<T> {
+  return {
+    statusCode: 400,
+    body: data
+  }
+}
 
-export const serverError = (data: any): HttpResponse => ({
-  statusCode: 500,
-  body: data
-})
+export function serverError<T>(data: T): HttpResponse<T> {
+  return {
+    statusCode: 500,
+    body: data
+  }
+}
