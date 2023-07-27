@@ -1,11 +1,14 @@
 import { User } from '@/entities/user';
 import { Either } from '@/shared/either';
 import { MailServiceError } from '../errors/mail-service-error';
-import { UseCase } from '../ports/use-case';
 import { EmailService } from './ports/email-service';
 import { EmailOptions } from "@/dtos/email-options"
 
-export class SendEmailUseCase implements UseCase {
+interface UseCase<T, R> {
+  perform: (request: T) => Promise<T | R>;
+}
+
+export class SendEmailUseCase implements UseCase<User,  Either<MailServiceError,EmailOptions>> {
   private readonly emailOptions: EmailOptions;
   private readonly emailService: EmailService;
 

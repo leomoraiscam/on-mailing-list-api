@@ -4,11 +4,14 @@ import { User } from '@/entities/user';
 import { UserData } from '@/dtos/user-data';
 import { Either, left, right } from '@/shared/either';
 import { MailServiceError } from '../errors/mail-service-error';
-import { UseCase } from '../ports/use-case';
 import { RegisterUserOnMailingListUseCase } from '../register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import { SendEmailUseCase } from '../send-email/send-email-use-case';
 
-export class RegisterUserAndSendEmailUseCase implements UseCase {
+interface UseCase<T, R> {
+  perform: (request: T) => Promise<T | R>;
+}
+
+export class RegisterUserAndSendEmailUseCase implements UseCase<UserData, Either<InvalidNameError | InvalidEmailError | MailServiceError, UserData>> {
   private registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
   private sendEmailUseCase: SendEmailUseCase;
 
