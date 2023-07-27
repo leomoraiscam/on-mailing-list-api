@@ -35,28 +35,28 @@ describe('Register user web controller', () => {
   })
 
   it('should return status code 201 when request contains valid user data', async () => {
-    const request: HttpRequest = {
+    const request: HttpRequest<UserData> = {
       body: {
         name: 'John Doe',
         email: 'john_doe@email.com',
       },
     };
 
-    const response: HttpResponse = await registerUserAndSendEmailController.handle(request);
+    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(request);
 
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(request.body);
   });
 
   it('should return status code 400 when request contains invalid user name', async () => {
-    const requestWithInvalidName: HttpRequest = {
+    const requestWithInvalidName: HttpRequest<UserData> = {
       body: {
         name: 'A',
         email: 'john_doe@email.com',
       },
     };
 
-    const response: HttpResponse = await registerUserAndSendEmailController.handle(
+    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(
       requestWithInvalidName
     );
 
@@ -65,14 +65,14 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 400 when request contains invalid user email', async () => {
-    const requestWithInvalidEmail: HttpRequest = {
+    const requestWithInvalidEmail: HttpRequest<UserData> = {
       body: {
         name: 'John Doe',
         email: 'johnDoe.com',
       },
     };
 
-    const response: HttpResponse = await registerUserAndSendEmailController.handle(
+    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(
       requestWithInvalidEmail
     );
 
@@ -81,13 +81,13 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 400 when request is missing user name', async () => {
-    const requestMissingName: HttpRequest = {
+    const requestMissingName: HttpRequest<Partial<UserData>> = {
       body: {
         email: 'john_doe@email.com',
       },
     };
 
-    const response: HttpResponse = await registerUserAndSendEmailController.handle(requestMissingName);
+    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(requestMissingName);
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(MissingParamError);
@@ -97,13 +97,13 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 400 when request is missing user email', async () => {
-    const requestMissingEmail: HttpRequest = {
+    const requestMissingEmail: HttpRequest<Partial<UserData>> = {
       body: {
         name: 'John Doe',
       },
     };
 
-    const response: HttpResponse = await registerUserAndSendEmailController.handle(requestMissingEmail);
+    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(requestMissingEmail);
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(MissingParamError);
@@ -113,11 +113,11 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 400 when request is missing user name and email', async () => {
-    const requestMissingNameAndEmail: HttpRequest = {
+    const requestMissingNameAndEmail: HttpRequest<Partial<UserData>> = {
       body: {},
     };
 
-    const response: HttpResponse = await registerUserAndSendEmailController.handle(
+    const response: HttpResponse<Partial<UserData> | Error> = await registerUserAndSendEmailController.handle(
       requestMissingNameAndEmail
     );
 
@@ -131,7 +131,7 @@ describe('Register user web controller', () => {
   it('should return status code 500 when server raises', async () => {
     const errorThrowingUseCaseStub: UseCase = new ErrorThrowingUseCaseStub();
 
-    const request: HttpRequest = {
+    const request: HttpRequest<UserData> = {
       body: {
         name: 'John Doe',
         email: 'john_doe@email.com',
@@ -142,7 +142,7 @@ describe('Register user web controller', () => {
       errorThrowingUseCaseStub
     );
 
-    const response: HttpResponse = await controller.handle(
+    const response: HttpResponse<UserData | Error> = await controller.handle(
       request
     );
 
