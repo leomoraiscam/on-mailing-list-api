@@ -1,10 +1,10 @@
 import { UserData } from '@/dtos/user-data';
 import { UseCase } from '@/usecases/ports/use-case';
+
 import { MissingParamError } from './errors/missing-param-error';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
 import { badRequest, created, serverError } from './utils/http-helper';
-import { User } from '@/entities/user';
 
 export class RegisterUserAndSendEmailController {
   private readonly usecase: UseCase;
@@ -13,7 +13,9 @@ export class RegisterUserAndSendEmailController {
     this.usecase = usecase;
   }
 
-  async handle(request: HttpRequest<UserData | Partial<UserData>>): Promise<HttpResponse<UserData | Error>> {  
+  async handle(
+    request: HttpRequest<UserData | Partial<UserData>>
+  ): Promise<HttpResponse<UserData | Error>> {
     try {
       if (!request.body.name || !request.body.email) {
         let missing = !request.body.name ? 'name ' : '';
