@@ -14,6 +14,12 @@
     "test-staged": "npm test -- --findRelatedTests",
     "test-ci": "npm test -- --coverage"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -55,5 +61,15 @@
   },
   "_moduleAliases": {
     "@": "dist"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix --ext .ts ."
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
