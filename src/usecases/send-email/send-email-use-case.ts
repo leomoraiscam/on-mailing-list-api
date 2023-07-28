@@ -1,15 +1,19 @@
+import { EmailOptions } from '@/dtos/email-options';
 import { User } from '@/entities/user';
 import { Either } from '@/shared/either';
+
 import { MailServiceError } from '../errors/mail-service-error';
 import { EmailService } from './ports/email-service';
-import { EmailOptions } from "@/dtos/email-options"
 
 interface UseCase<T, R> {
   perform: (request: T) => Promise<T | R>;
 }
 
-export class SendEmailUseCase implements UseCase<User,  Either<MailServiceError,EmailOptions>> {
+export class SendEmailUseCase
+  implements UseCase<User, Either<MailServiceError, EmailOptions>>
+{
   private readonly emailOptions: EmailOptions;
+
   private readonly emailService: EmailService;
 
   constructor(emailOptions: EmailOptions, emailService: EmailService) {
@@ -19,12 +23,7 @@ export class SendEmailUseCase implements UseCase<User,  Either<MailServiceError,
 
   async perform(
     request: User
-  ): Promise<
-    Either<
-      MailServiceError,
-      EmailOptions
-    >
-  > {
+  ): Promise<Either<MailServiceError, EmailOptions>> {
     const greetings = `E ai <b>${request.name}</b>, beleza ?`;
     const customizedHTML = `${greetings}<br><br>${this.emailOptions.html}`;
 

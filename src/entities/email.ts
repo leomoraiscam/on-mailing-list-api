@@ -1,9 +1,10 @@
-import { Either, left, right } from "@/shared/either";
-import { InvalidEmailError } from "./errors/invalid-email-error";
+import { Either, left, right } from '@/shared/either';
+
+import { InvalidEmailError } from './errors/invalid-email-error';
 
 export class Email {
   public readonly value: string;
-  
+
   private constructor(email: string) {
     this.value = email;
   }
@@ -18,10 +19,10 @@ export class Email {
 
   static validate(email: string): boolean {
     const emailRegex =
-      /^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
+      /^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
     if (!email) {
-      return false
+      return false;
     }
 
     const [local, domain] = email.split('@');
@@ -30,7 +31,7 @@ export class Email {
       return false;
     }
 
-    if (!emailRegex.test((email))) {
+    if (!emailRegex.test(email)) {
       return false;
     }
 
@@ -44,10 +45,12 @@ export class Email {
 
     const domainParts = domain.split('.');
 
-    if (domainParts.some(function (part) {
-      return part.length > 63
-    })) {
-      return false
+    if (
+      domainParts.some(function (part) {
+        return part.length > 63;
+      })
+    ) {
+      return false;
     }
 
     return true;
