@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  mailing-list-database:
+    image: mongo
+    container_name: mailing-list-database
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - MONGODB_USERNAME=${MONGO_USER}
+      - MONGODB_PASSWORD=${MONGO_PASS}
+      - MONGODB_DATABASE=${MONGO_DB}
+    ports:
+      - "15017:27017"
+    volumes:
+      -  mailing-list-data:/data/db
+    networks:
+      - mailing-list-network
+
+volumes:
+  mailing-list-data:
+    driver: local
+
+networks:
+  mailing-list-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
