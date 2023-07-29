@@ -1,5 +1,6 @@
 import { EmailOptions } from '@/dtos/email-options';
 import { User } from '@/entities/user';
+import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either } from '@/shared/either';
 
 import { MailServiceError } from '../errors/mail-service-error';
@@ -16,9 +17,16 @@ export class SendEmailUseCase
 
   private readonly emailService: EmailService;
 
-  constructor(emailOptions: EmailOptions, emailService: EmailService) {
+  private readonly loggerService: LoggerService;
+
+  constructor(
+    emailOptions: EmailOptions,
+    emailService: EmailService,
+    loggerService: LoggerService
+  ) {
     this.emailOptions = emailOptions;
     this.emailService = emailService;
+    this.loggerService = loggerService;
   }
 
   async perform(
@@ -40,6 +48,15 @@ export class SendEmailUseCase
       attachments: this.emailOptions.attachments,
     };
 
-    return this.emailService.send(emailInfo);
+    const sendMail = await this.emailService.send(emailInfo);
+
+    if (sendMail.isRight()) {
+      this.loggerService.log(
+        'log',
+        `${SendEmailUseCase.name} [${JSON.stringify(request)}] - Message sent`
+      );
+    }
+
+    return sendMail;
   }
 }

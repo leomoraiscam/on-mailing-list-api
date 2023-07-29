@@ -1,5 +1,6 @@
 import { UserData } from '@/dtos/user-data';
 import { User } from '@/entities/user';
+import { LoggerService } from '@/external/logger-services/ports/logger-service';
 
 import { UserRepository } from './ports/user-repository';
 
@@ -12,8 +13,11 @@ export class RegisterUserOnMailingListUseCase
 {
   private readonly repository: UserRepository;
 
-  public constructor(repository: UserRepository) {
+  private readonly loggerService: LoggerService;
+
+  public constructor(repository: UserRepository, loggerService: LoggerService) {
     this.repository = repository;
+    this.loggerService = loggerService;
   }
 
   public async perform(request: User): Promise<UserData> {
@@ -27,6 +31,13 @@ export class RegisterUserOnMailingListUseCase
         name: request.name.value,
         email: request.email.value,
       });
+
+      this.loggerService.log(
+        'log',
+        `${RegisterUserOnMailingListUseCase.name} [${JSON.stringify(
+          request
+        )}] - Recipient added`
+      );
     }
 
     return {

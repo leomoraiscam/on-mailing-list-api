@@ -2,6 +2,7 @@ import { UserData } from '@/dtos/user-data';
 import { InvalidEmailError } from '@/entities/errors/invalid-email-error';
 import { InvalidNameError } from '@/entities/errors/invalid-name-error';
 import { User } from '@/entities/user';
+import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either, left, right } from '@/shared/either';
 
 import { MailServiceError } from '../errors/mail-service-error';
@@ -23,12 +24,16 @@ export class RegisterUserAndSendEmailUseCase
 
   private sendEmailUseCase: SendEmailUseCase;
 
+  private loggerService: LoggerService;
+
   constructor(
     registerUserOnMailingList: RegisterUserOnMailingListUseCase,
-    sendEmail: SendEmailUseCase
+    sendEmail: SendEmailUseCase,
+    loggerService: LoggerService
   ) {
     this.registerUserOnMailingListUseCase = registerUserOnMailingList;
     this.sendEmailUseCase = sendEmail;
+    this.loggerService = loggerService;
   }
 
   async perform(
@@ -50,8 +55,20 @@ export class RegisterUserAndSendEmailUseCase
     const result = await this.sendEmailUseCase.perform(user);
 
     if (result.isLeft()) {
+      this.loggerService.log(
+        'error',
+        `${RegisterUserAndSendEmailUseCase.name} [${JSON.stringify(
+          result.value
+        )}]`
+      );
+
       return left(result.value);
     }
+
+    this.loggerService.log(
+      'log',
+      `${RegisterUserAndSendEmailUseCase.name}  - Request completed with success`
+    );
 
     return right({
       name: user.name.value,
