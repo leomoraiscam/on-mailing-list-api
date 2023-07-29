@@ -1,7 +1,12 @@
+import 'module-alias';
+import * as dotenv from 'dotenv';
+
 import { mongoHelper } from '@/external/repositories/mongodb/helpers/mongo-helper';
 
+dotenv.config();
+
 mongoHelper
-  .connect('mongodb://127.0.0.1:15017/')
+  .connect(`mongodb://${process.env.MONGO_URL}:${process.env.MONGO_PORT}/`)
   .then(async () => {
     const app = (await import('./config/app')).default;
 
