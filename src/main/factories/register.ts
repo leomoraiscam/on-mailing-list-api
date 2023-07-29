@@ -1,3 +1,4 @@
+import { WinstonLoggerService } from '@/external/logger-services/wintson-logger-services';
 import { NodemailerEmailService } from '@/external/mail-services/nodemailer-email-service';
 import { MongodbUserRepository } from '@/external/repositories/mongodb/mongodb-user-repository';
 import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
@@ -10,16 +11,22 @@ import { getEmailOptions } from '../config/email';
 export const makeRegisterUserAndSendEmailController =
   (): RegisterUserAndSendEmailController => {
     const mongodbUserRepository = new MongodbUserRepository();
-    const emailService = new NodemailerEmailService();
+    const loggerService = new WinstonLoggerService();
+    const emailService = new NodemailerEmailService(loggerService);
     const registerUserOnMailingListUseCase =
-      new RegisterUserOnMailingListUseCase(mongodbUserRepository);
+      new RegisterUserOnMailingListUseCase(
+        mongodbUserRepository,
+        loggerService
+      );
     const sendEmailUseCase = new SendEmailUseCase(
       getEmailOptions(),
-      emailService
+      emailService,
+      loggerService
     );
     const registerUserAndSendEmailUseCase = new RegisterUserAndSendEmailUseCase(
       registerUserOnMailingListUseCase,
-      sendEmailUseCase
+      sendEmailUseCase,
+      loggerService
     );
     const registerUserAndSendEmailController =
       new RegisterUserAndSendEmailController(registerUserAndSendEmailUseCase);
