@@ -1,19 +1,20 @@
+import { UserData } from '@/dtos/user-data';
 import { InvalidEmailError } from '@/entities/errors/invalid-email-error';
 import { InvalidNameError } from '@/entities/errors/invalid-name-error';
-import { UserData } from '@/dtos/user-data';
 import { UseCase } from '@/usecases/ports/use-case';
+import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
 import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
 import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
+import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
+import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { MissingParamError } from '@/web-controllers/errors/missing-param-error';
 import { HttpRequest } from '@/web-controllers/ports/http-request';
 import { HttpResponse } from '@/web-controllers/ports/http-response';
 import { RegisterUserAndSendEmailController } from '@/web-controllers/register-user-and-send-email-controller';
-import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
-import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
-import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
+
 import { mailOptions } from '../fixtures/stubs/email-options-stub';
-import { MailServiceStub } from '../fixtures/stubs/mail-service-stub';
 import { ErrorThrowingUseCaseStub } from '../fixtures/stubs/error-throwing-stub';
+import { MailServiceStub } from '../fixtures/stubs/mail-service-stub';
 
 describe('Register user web controller', () => {
   let users: UserData[];
@@ -27,12 +28,28 @@ describe('Register user web controller', () => {
   beforeEach(() => {
     users = [];
     userRepository = new InMemoryUserRepository(users);
-    registerUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(userRepository);
+    const loggerService = {
+      log: jest.fn(),
+    };
+    registerUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(
+      userRepository,
+      loggerService
+    );
     mailServiceStub = new MailServiceStub();
-    sendEmailUseCase = new SendEmailUseCase(mailOptions, mailServiceStub)
-    registerUserAndSendEmailUseCase = new RegisterUserAndSendEmailUseCase(registerUserOnMailingListUseCase, sendEmailUseCase)
-    registerUserAndSendEmailController = new RegisterUserAndSendEmailController(registerUserAndSendEmailUseCase)
-  })
+    sendEmailUseCase = new SendEmailUseCase(
+      mailOptions,
+      mailServiceStub,
+      loggerService
+    );
+    registerUserAndSendEmailUseCase = new RegisterUserAndSendEmailUseCase(
+      registerUserOnMailingListUseCase,
+      sendEmailUseCase,
+      loggerService
+    );
+    registerUserAndSendEmailController = new RegisterUserAndSendEmailController(
+      registerUserAndSendEmailUseCase
+    );
+  });
 
   it('should return status code 201 when request contains valid user data', async () => {
     const request: HttpRequest<UserData> = {
@@ -42,7 +59,8 @@ describe('Register user web controller', () => {
       },
     };
 
-    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(request);
+    const response: HttpResponse<UserData | Error> =
+      await registerUserAndSendEmailController.handle(request);
 
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(request.body);
@@ -56,9 +74,8 @@ describe('Register user web controller', () => {
       },
     };
 
-    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(
-      requestWithInvalidName
-    );
+    const response: HttpResponse<UserData | Error> =
+      await registerUserAndSendEmailController.handle(requestWithInvalidName);
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(InvalidNameError);
@@ -72,9 +89,8 @@ describe('Register user web controller', () => {
       },
     };
 
-    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(
-      requestWithInvalidEmail
-    );
+    const response: HttpResponse<UserData | Error> =
+      await registerUserAndSendEmailController.handle(requestWithInvalidEmail);
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(InvalidEmailError);
@@ -87,7 +103,8 @@ describe('Register user web controller', () => {
       },
     };
 
-    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(requestMissingName);
+    const response: HttpResponse<UserData | Error> =
+      await registerUserAndSendEmailController.handle(requestMissingName);
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(MissingParamError);
@@ -103,7 +120,8 @@ describe('Register user web controller', () => {
       },
     };
 
-    const response: HttpResponse<UserData | Error> = await registerUserAndSendEmailController.handle(requestMissingEmail);
+    const response: HttpResponse<UserData | Error> =
+      await registerUserAndSendEmailController.handle(requestMissingEmail);
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(MissingParamError);
@@ -117,9 +135,10 @@ describe('Register user web controller', () => {
       body: {},
     };
 
-    const response: HttpResponse<Partial<UserData> | Error> = await registerUserAndSendEmailController.handle(
-      requestMissingNameAndEmail
-    );
+    const response: HttpResponse<Partial<UserData> | Error> =
+      await registerUserAndSendEmailController.handle(
+        requestMissingNameAndEmail
+      );
 
     expect(response.statusCode).toEqual(400);
     expect(response.body).toBeInstanceOf(MissingParamError);
@@ -138,9 +157,8 @@ describe('Register user web controller', () => {
       },
     };
 
-    const controller: RegisterUserAndSendEmailController = new RegisterUserAndSendEmailController(
-      errorThrowingUseCaseStub
-    );
+    const controller: RegisterUserAndSendEmailController =
+      new RegisterUserAndSendEmailController(errorThrowingUseCaseStub);
 
     const response: HttpResponse<UserData | Error> = await controller.handle(
       request

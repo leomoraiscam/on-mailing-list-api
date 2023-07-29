@@ -1,20 +1,22 @@
-import { User } from '@/entities/user';
 import { UserData } from '@/dtos/user-data';
-import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
+import { User } from '@/entities/user';
 import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
+import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 
 describe('Register user on mailing list use case', () => {
   it('should add user with complete data to mailing list', async () => {
     const users: UserData[] = [];
     const userRepository: UserRepository = new InMemoryUserRepository(users);
-    const registerUserOnMailingList: RegisterUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(
-      userRepository
-    );
-  
+    const loggerService = {
+      log: jest.fn(),
+    };
+    const registerUserOnMailingList: RegisterUserOnMailingListUseCase =
+      new RegisterUserOnMailingListUseCase(userRepository, loggerService);
+
     const data = {
-     name: 'John Doe',
-     email: 'john_doe@email.com'
+      name: 'John Doe',
+      email: 'john_doe@email.com',
     };
 
     const user = User.create({ ...data }).value as User;
