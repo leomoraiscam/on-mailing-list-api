@@ -38,8 +38,8 @@ describe('MongoDb user repository', () => {
       userRepository.add({
         name: 'John Smith',
         email: 'john_smith@email.com',
-      })
-    ])
+      }),
+    ]);
 
     const users = await userRepository.findAllUsers();
 

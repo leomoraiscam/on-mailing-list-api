@@ -1,4 +1,4 @@
-import { EmailOptions } from "@/dtos/email-options"
+import { EmailOptions } from '@/dtos/email-options';
 
 export const emailData = {
   attachmentFilePath: '../../../tmp/text.txt',
@@ -15,17 +15,17 @@ export const emailData = {
       contentType: 'text/plain',
     },
   ],
-}
+};
 
 export const mailOptions: EmailOptions = {
   host: 'localhost',
   port: 8671,
   username: 'fakeMailConfiguration',
   password: '123456',
-  from: emailData.fromName + ' ' + emailData.fromEmail,
-  to: emailData.toName + '<' + emailData.toEmail + '>',
+  from: `${emailData.fromName} ${emailData.fromEmail}`,
+  to: `${emailData.toName}<${emailData.toEmail}>`,
   subject: emailData.subject,
   text: emailData.emailBody,
   html: emailData.emailBodyHTML,
-  attachments: emailData.attachment
-}
+  attachments: emailData.attachment,
+};
