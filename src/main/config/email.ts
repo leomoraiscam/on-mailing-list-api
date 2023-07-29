@@ -15,10 +15,10 @@ export function getEmailOptions(): EmailOptions {
   const to = '';
 
   const mailOptions: EmailOptions = {
-    host: 'smtp.mailtrap.io',
-    port: 2525,
-    username: '947bdd50600a6b',
-    password: '4c510740359934',
+    host: process.env.MAILTRAP_HOST,
+    port: Number(process.env.MAILTRAP_PORT),
+    username: process.env.MAILTRAP_USER,
+    password: process.env.MAILTRAP_PASSWORD,
     from,
     to,
     subject: 'Attachments e-mail',
