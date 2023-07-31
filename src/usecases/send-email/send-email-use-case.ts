@@ -4,11 +4,8 @@ import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either } from '@/shared/either';
 
 import { MailServiceError } from '../errors/mail-service-error';
+import { UseCase } from '../ports/use-case';
 import { EmailService } from './ports/email-service';
-
-interface UseCase<T, R> {
-  perform: (request: T) => Promise<T | R>;
-}
 
 export class SendEmailUseCase
   implements UseCase<User, Either<MailServiceError, EmailOptions>>

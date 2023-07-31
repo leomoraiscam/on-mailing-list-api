@@ -6,12 +6,9 @@ import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either, left, right } from '@/shared/either';
 
 import { MailServiceError } from '../errors/mail-service-error';
+import { UseCase } from '../ports/use-case';
 import { RegisterUserOnMailingListUseCase } from '../register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import { SendEmailUseCase } from '../send-email/send-email-use-case';
-
-interface UseCase<T, R> {
-  perform: (request: T) => Promise<T | R>;
-}
 
 export class RegisterUserAndSendEmailUseCase
   implements

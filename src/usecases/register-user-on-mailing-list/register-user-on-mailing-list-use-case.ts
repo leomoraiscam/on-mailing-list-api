@@ -2,11 +2,8 @@ import { UserData } from '@/dtos/user-data';
 import { User } from '@/entities/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
 
+import { UseCase } from '../ports/use-case';
 import { UserRepository } from './ports/user-repository';
-
-interface UseCase<T, R> {
-  perform: (request: T) => Promise<T | R>;
-}
 
 export class RegisterUserOnMailingListUseCase
   implements UseCase<User, UserData>
