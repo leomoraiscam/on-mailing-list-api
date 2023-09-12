@@ -148,7 +148,7 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 500 when server raises', async () => {
-    const errorThrowingUseCaseStub: UseCase = new ErrorThrowingUseCaseStub();
+    const errorThrowingUseCaseStub = new ErrorThrowingUseCaseStub();
 
     const request: HttpRequest<UserData> = {
       body: {

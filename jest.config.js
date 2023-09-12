@@ -1,3 +1,7 @@
+import { pathsToModuleNameMapper } from 'ts-jest';
+
+import { compilerOptions } from './tsconfig.json';
+
 module.exports = {
   preset: '@shelf/jest-mongodb',
   roots: ['<rootDir>/tests'],
@@ -18,5 +22,5 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@/tests(.*)$': '<rootDir>/tests/$1',
   },
-  setupFiles: ['dotenv/config']
+  setupFiles: ['dotenv/config'],
 };

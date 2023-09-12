@@ -10,8 +10,8 @@ mongoHelper
   .then(async () => {
     const app = (await import('./config/app')).default;
 
-    app.listen(3333, () => {
-      console.log('Server running at http://localhost:3333');
+    app.listen(3000, () => {
+      console.log('Server running at http://localhost:3000');
     });
   })
   .catch((error) => {

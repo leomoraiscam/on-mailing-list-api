@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import request from 'supertest';
 
 import { mongoHelper } from '@/external/repositories/mongodb/helpers/mongo-helper';
@@ -10,6 +11,7 @@ describe('Register Router', () => {
 
   afterAll(async () => {
     await mongoHelper.disconnect();
+    fs.unlink(`${process.cwd()}/globalConfig.json`, () => {});
   });
 
   beforeEach(async () => {

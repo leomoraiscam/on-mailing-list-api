@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "allowJs": true,
     "baseUrl": ".",
+    "resolveJsonModule": true,
     "paths": {
       "@/*": ["src/*"],
       "@tests/*": ["tests/*"] 
