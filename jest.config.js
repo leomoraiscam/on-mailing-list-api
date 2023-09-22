@@ -1,6 +1,7 @@
-import { pathsToModuleNameMapper } from 'ts-jest';
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { pathsToModuleNameMapper } = require('ts-jest');
 
-import { compilerOptions } from './tsconfig.json';
+const { compilerOptions } = require('./tsconfig.json');
 
 module.exports = {
   preset: '@shelf/jest-mongodb',
@@ -14,13 +15,12 @@ module.exports = {
     '!**/tests/**',
     '!**/config/**',
   ],
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: '<rootDir>/',
+  }),
   testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest',
-  },
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^@/tests(.*)$': '<rootDir>/tests/$1',
   },
   setupFiles: ['dotenv/config'],
 };
