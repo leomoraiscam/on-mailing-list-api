@@ -3,3 +3,5 @@ Todo`s
   - email has to be valid
   - name has to be valid
 2. E-mail user with bonus
+
+3. Initialize V2 API.
