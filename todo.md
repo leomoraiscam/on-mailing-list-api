@@ -1,4 +1,4 @@
-API Requirements
+Todo`s
 1. Register user on mailing list 
   - email has to be valid
   - name has to be valid
