@@ -1,4 +1,6 @@
-export class MailServiceError extends Error {
+import { UseCaseError } from './usecase-error';
+
+export class MailServiceError extends Error implements UseCaseError {
   public readonly name: string = 'MailServiceError';
 
   constructor() {
