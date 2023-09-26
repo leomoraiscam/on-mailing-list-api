@@ -17,14 +17,38 @@ describe('MongoDb user repository', () => {
   it('should add an user when the same is added, it should exist', async () => {
     const userRepository = new MongodbUserRepository();
 
-    const user = {
+    await userRepository.add({
       name: 'John Doe',
       email: 'john_doe@email.com',
+    });
+
+    const user = await userRepository.findUserByEmail('john_doe@email.com');
+
+    expect(user.name).toEqual('any_name');
+  });
+
+  it('should be able return true when user is added, it should exist', async () => {
+    const userRepository = new MongodbUserRepository();
+
+    const user = {
+      name: 'any_name',
+      email: 'any_email@mail.com',
     };
 
     await userRepository.add(user);
 
     expect(await userRepository.exists(user)).toBeTruthy();
+  });
+
+  it('should be able return false when user is not added, it should not exist', async () => {
+    const userRepository = new MongodbUserRepository();
+
+    expect(
+      await userRepository.exists({
+        name: 'any_name',
+        email: 'any_email@mail.com',
+      })
+    ).toBeFalsy();
   });
 
   it('should return all users added', async () => {
