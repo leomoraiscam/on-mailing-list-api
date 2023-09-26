@@ -5,7 +5,7 @@ import { HttpRequest } from '@/web-controllers/ports/http-request';
 import { RegisterUserAndSendEmailController } from '@/web-controllers/register-user-and-send-email-controller';
 
 export const adaptRoute = (controller: RegisterUserAndSendEmailController) => {
-  return async (request: Request, response: Response) => {
+  return async (request: Request, response: Response): Promise<void> => {
     const httpRequest: HttpRequest<UserData> = {
       body: request.body,
     };
