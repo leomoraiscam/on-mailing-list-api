@@ -3,18 +3,14 @@ import { Either, left, right } from '@/shared/either';
 import { InvalidEmailError } from './errors/invalid-email-error';
 
 export class Email {
-  public readonly value: string;
+  private readonly email: string;
 
   private constructor(email: string) {
-    this.value = email;
+    this.email = email;
   }
 
-  static create(email: string): Either<InvalidEmailError, Email> {
-    if (Email.validate(email)) {
-      return right(new Email(email));
-    }
-
-    return left(new InvalidEmailError(email));
+  public get value(): string {
+    return this.email;
   }
 
   static validate(email: string): boolean {
@@ -46,7 +42,7 @@ export class Email {
     const domainParts = domain.split('.');
 
     if (
-      domainParts.some(function (part) {
+      domainParts.some((part) => {
         return part.length > 63;
       })
     ) {
@@ -54,5 +50,13 @@ export class Email {
     }
 
     return true;
+  }
+
+  static create(email: string): Either<InvalidEmailError, Email> {
+    if (Email.validate(email)) {
+      return right(new Email(email));
+    }
+
+    return left(new InvalidEmailError(email));
   }
 }
