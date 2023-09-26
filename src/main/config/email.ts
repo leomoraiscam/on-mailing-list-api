@@ -3,7 +3,7 @@ import { EmailOptions } from '@/dtos/email-options';
 const attachments = [
   {
     filename: 'clean-architecture.pdf',
-    path: 'https://otaviolemos.github.io/clean-architecture.pdf',
+    path: process.env.FILE_PATH || '',
   },
 ];
 
