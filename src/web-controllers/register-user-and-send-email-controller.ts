@@ -1,9 +1,9 @@
 import { UserData } from '@/dtos/user-data';
 
 import { MissingParamError } from './errors/missing-param-error';
+import { badRequest, created, serverError } from './helper/http-helper';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
-import { badRequest, created, serverError } from './utils/http-helper';
 
 export interface UseCase {
   perform(request: any): Promise<any>;
