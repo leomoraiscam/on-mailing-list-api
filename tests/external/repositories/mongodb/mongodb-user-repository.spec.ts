@@ -24,7 +24,7 @@ describe('MongoDb user repository', () => {
 
     const user = await userRepository.findUserByEmail('john_doe@email.com');
 
-    expect(user.name).toEqual('any_name');
+    expect(user.name).toEqual('John Doe');
   });
 
   it('should be able return true when user is added, it should exist', async () => {
