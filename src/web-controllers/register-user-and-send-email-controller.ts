@@ -1,13 +1,11 @@
 import { UserData } from '@/dtos/user-data';
 
+import { ControllerError } from './errors/controller-error';
 import { MissingParamError } from './errors/missing-param-error';
 import { badRequest, created, serverError } from './helper/http-helper';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
-
-export interface UseCase {
-  perform(request: any): Promise<any>;
-}
+import { UseCase } from './ports/use-case';
 
 export class RegisterUserAndSendEmailController {
   private readonly usecase: UseCase;
@@ -18,26 +16,26 @@ export class RegisterUserAndSendEmailController {
 
   async handle(
     request: HttpRequest<UserData | Partial<UserData>>
-  ): Promise<HttpResponse<UserData | Error>> {
+  ): Promise<HttpResponse<UserData | ControllerError>> {
     try {
       if (!request.body.name || !request.body.email) {
-        let missing = !request.body.name ? 'name ' : '';
+        const missing = !request.body.name ? 'name' : 'email';
 
-        missing += !request.body.email ? 'email' : '';
-
-        return badRequest<Error>(new MissingParamError(missing.trim()));
+        return badRequest<ControllerError>(
+          new MissingParamError(missing.trim())
+        );
       }
 
       const userData = request.body as UserData;
       const response = await this.usecase.perform(userData);
 
       if (response.isLeft()) {
-        return badRequest<Error>(response.value);
+        return badRequest<ControllerError>(response.value);
       }
 
       return created<UserData>(response.value);
     } catch (error) {
-      return serverError<Error>(error);
+      return serverError<ControllerError>(error);
     }
   }
 }
