@@ -19,11 +19,11 @@ export class NodemailerEmailService implements EmailService {
   ): Promise<Either<MailServiceError, EmailOptions>> {
     try {
       const transporter = nodemailer.createTransport({
-        host: options.host,
-        port: options.port,
+        host: process.env.MAILTRAP_HOST,
+        port: Number(process.env.MAILTRAP_PORT),
         auth: {
-          user: options.username,
-          pass: options.password,
+          user: process.env.MAILTRAP_USER,
+          pass: process.env.MAILTRAP_PASSWORD,
         },
       });
 

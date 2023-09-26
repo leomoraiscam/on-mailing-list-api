@@ -33,10 +33,6 @@ export class SendEmailUseCase
     const customizedHTML = `${greetings}<br><br>${this.emailOptions.html}`;
 
     const emailInfo: EmailOptions = {
-      host: this.emailOptions.host,
-      port: this.emailOptions.port,
-      username: this.emailOptions.username,
-      password: this.emailOptions.password,
       from: this.emailOptions.from,
       to: `${request.name.value}<${request.email.value}>`,
       subject: this.emailOptions.subject,
