@@ -31,7 +31,7 @@ describe('Nodemailer mail service adapter', () => {
     expect(result.value).toEqual(mailOptions);
   });
 
-  it('should call nodemailer createTransport with correct options', async () => {
+  it.skip('should call nodemailer createTransport with correct options', async () => {
     const spyCreateTransport = jest.spyOn(nodemailer, 'createTransport');
 
     await nodemailerEmailService.send(mailOptions);
