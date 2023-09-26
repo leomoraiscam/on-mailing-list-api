@@ -2,8 +2,8 @@ import { EmailOptions } from '@/dtos/email-options';
 
 export const emailData = {
   attachmentFilePath: '../../../tmp/text.txt',
-  fromName: 'MailingList',
-  fromEmail: 'mainling_list_contact@mail.com',
+  fromName: 'Equipe mailing list',
+  fromEmail: 'groupmailinglist@mail.com',
   toName: 'John Doe',
   toEmail: 'jonh_doe@mail.com',
   subject: 'Test e-mail',
@@ -18,10 +18,6 @@ export const emailData = {
 };
 
 export const mailOptions: EmailOptions = {
-  host: 'localhost',
-  port: 8671,
-  username: 'fakeMailConfiguration',
-  password: '123456',
   from: `${emailData.fromName} ${emailData.fromEmail}`,
   to: `${emailData.toName}<${emailData.toEmail}>`,
   subject: emailData.subject,

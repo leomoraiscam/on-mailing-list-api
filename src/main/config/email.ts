@@ -7,11 +7,11 @@ const attachments = [
   },
 ];
 
-const fromName = 'MailingList';
-const fromEmail = 'mainling_list_contact@mail.com';
+const fromName = 'Equipe mailing list';
+const fromEmail = 'groupmailinglist@mail.com';
 
 export function getEmailOptions(): EmailOptions {
-  const from = `${fromName} | theWiseDev <${fromEmail}>`;
+  const from = `${fromName} | <${fromEmail}>`;
   const to = '';
 
   const mailOptions: EmailOptions = {
@@ -22,5 +22,6 @@ export function getEmailOptions(): EmailOptions {
     html: '<b>Hello world attachment test</b>',
     attachments,
   };
+
   return mailOptions;
 }
