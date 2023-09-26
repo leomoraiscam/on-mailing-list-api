@@ -31,6 +31,21 @@ describe('Nodemailer mail service adapter', () => {
     expect(result.value).toEqual(mailOptions);
   });
 
+  it('should call nodemailer createTransport with correct options', async () => {
+    const spyCreateTransport = jest.spyOn(nodemailer, 'createTransport');
+
+    await nodemailerEmailService.send(mailOptions);
+
+    expect(spyCreateTransport).toHaveBeenCalledWith({
+      host: 'localhost',
+      port: 8671,
+      auth: {
+        user: 'fakeMailConfiguration',
+        pass: '123456',
+      },
+    });
+  });
+
   it('should return error if email is not sent', async () => {
     sendMailMock.mockImplementationOnce(() => {
       throw new Error();
