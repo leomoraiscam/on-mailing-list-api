@@ -1,6 +1,12 @@
 import { Email } from '@/entities/email';
 
-describe('Email domain class', () => {
+describe('User email value object', () => {
+  it('should accept valid email', () => {
+    const email = 'local@domain.com';
+
+    expect(Email.validate(email)).toBeTruthy();
+  });
+
   it('should not accept null strings', () => {
     const email = null;
 
@@ -11,12 +17,6 @@ describe('Email domain class', () => {
     const email = '';
 
     expect(Email.validate(email)).toBeFalsy();
-  });
-
-  it('should accept valid email', () => {
-    const email = 'local@domain.com';
-
-    expect(Email.validate(email)).toBeTruthy();
   });
 
   it('should not accept local part larger than 64 chars', () => {

@@ -1,6 +1,6 @@
 import { User } from '@/entities/user';
 
-describe('User domain class', () => {
+describe('User Domain Entity', () => {
   it('should create user with valid data', () => {
     const userOrError = User.create({
       name: 'any',
