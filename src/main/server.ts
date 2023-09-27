@@ -10,8 +10,10 @@ mongoHelper
   .then(async () => {
     const app = (await import('./config/app')).default;
 
-    app.listen(3000, () => {
-      console.log('Server running at http://localhost:3000');
+    app.listen(process.env.APP_PORT || 3000, () => {
+      console.log(
+        `Server running at http://localhost:${process.env.APP_PORT || 3000}`
+      );
     });
   })
   .catch((error) => {
