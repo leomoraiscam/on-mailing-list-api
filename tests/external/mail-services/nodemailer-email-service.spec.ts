@@ -13,12 +13,12 @@ let nodemailerEmailService: NodemailerEmailService;
 
 nodemailer.createTransport.mockReturnValue({ sendMail: sendMailMock });
 
+const loggerService = {
+  log: jest.fn(),
+};
+
 describe('Nodemailer mail service external adapter', () => {
   beforeEach(() => {
-    const loggerService = {
-      log: jest.fn(),
-    };
-
     nodemailerEmailService = new NodemailerEmailService(loggerService);
 
     sendMailMock.mockClear();

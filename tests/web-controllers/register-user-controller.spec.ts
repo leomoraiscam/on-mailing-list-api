@@ -16,20 +16,20 @@ import { mailOptions } from '../fixtures/stubs/email-options-stub';
 import { ErrorThrowingUseCaseStub } from '../fixtures/stubs/error-throwing-stub';
 import { MailServiceStub } from '../fixtures/stubs/mail-service-stub';
 
+let mailServiceStub: MailServiceStub;
+
+let users: UserData[];
+let userRepository: UserRepository;
+let registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
+let sendEmailUseCase: SendEmailUseCase;
+let registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
+let registerUserAndSendEmailController: RegisterUserAndSendEmailController;
+const loggerService = {
+  log: jest.fn(),
+};
+
 describe('Register user web controller', () => {
-  let mailServiceStub: MailServiceStub;
-
-  let users: UserData[];
-  let userRepository: UserRepository;
-  let registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
-  let sendEmailUseCase: SendEmailUseCase;
-  let registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
-  let registerUserAndSendEmailController: RegisterUserAndSendEmailController;
-
   beforeEach(() => {
-    const loggerService = {
-      log: jest.fn(),
-    };
     mailServiceStub = new MailServiceStub();
 
     users = [];

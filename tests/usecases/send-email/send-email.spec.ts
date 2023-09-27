@@ -11,12 +11,14 @@ import {
 import { MailServiceErrorStub } from '../../fixtures/stubs/mail-service-error-stub';
 import { MailServiceStub } from '../../fixtures/stubs/mail-service-stub';
 
+const loggerService = {
+  log: jest.fn(),
+};
+
 describe('Register and send email to user use case', () => {
   it('should email user with valid name and email address', async () => {
     const mailServiceStub = new MailServiceStub();
-    const loggerService = {
-      log: jest.fn(),
-    };
+
     const sendEmailUseCase = new SendEmailUseCase(
       mailOptions,
       mailServiceStub,
@@ -39,9 +41,6 @@ describe('Register and send email to user use case', () => {
 
   it('should return error when email service fails', async () => {
     const mailServiceErrorStub = new MailServiceErrorStub();
-    const loggerService = {
-      log: jest.fn(),
-    };
     const sendEmailUseCase = new SendEmailUseCase(
       mailOptions,
       mailServiceErrorStub,

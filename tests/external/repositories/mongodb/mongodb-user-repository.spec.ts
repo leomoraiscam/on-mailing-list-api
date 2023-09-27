@@ -13,6 +13,7 @@ describe('MongoDb user repository', () => {
   });
 
   beforeEach(async () => {
+    userRepository = new MongodbUserRepository();
     await mongoHelper.clearCollection('users');
   });
 

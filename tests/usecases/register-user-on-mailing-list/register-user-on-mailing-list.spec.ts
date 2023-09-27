@@ -4,13 +4,15 @@ import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/u
 import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 
+const users: UserData[] = [];
+const loggerService = {
+  log: jest.fn(),
+};
+
 describe('Register user on mailing list use case', () => {
   it('should add user with complete data to mailing list', async () => {
-    const users: UserData[] = [];
     const userRepository: UserRepository = new InMemoryUserRepository(users);
-    const loggerService = {
-      log: jest.fn(),
-    };
+
     const registerUserOnMailingList: RegisterUserOnMailingListUseCase =
       new RegisterUserOnMailingListUseCase(userRepository, loggerService);
 
