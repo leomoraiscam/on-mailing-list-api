@@ -8,18 +8,18 @@ import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { MailServiceMock } from '../../fixtures/mocks/mail-service-mock';
 import { mailOptions } from '../../fixtures/stubs/email-options-stub';
 
+let users: UserData[];
+let userRepository: UserRepository;
+let registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
+let registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
+let mailServiceMock: MailServiceMock;
+let sendEmailUseCase: SendEmailUseCase;
+
+const loggerService = {
+  log: jest.fn(),
+};
+
 describe('Register and send email to user use case', () => {
-  let users: UserData[];
-  let userRepository: UserRepository;
-  let registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
-  let registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
-  let mailServiceMock: MailServiceMock;
-  let sendEmailUseCase: SendEmailUseCase;
-
-  const loggerService = {
-    log: jest.fn(),
-  };
-
   beforeEach(() => {
     users = [];
     userRepository = new InMemoryUserRepository(users);

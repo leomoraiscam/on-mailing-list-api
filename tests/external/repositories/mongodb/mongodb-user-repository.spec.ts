@@ -1,6 +1,8 @@
 import { mongoHelper } from '@/external/repositories/mongodb/helpers/mongo-helper';
 import { MongodbUserRepository } from '@/external/repositories/mongodb/mongodb-user-repository';
 
+let userRepository: MongodbUserRepository;
+
 describe('MongoDb user repository', () => {
   beforeAll(async () => {
     await mongoHelper.connect(process.env.MONGO_URL);
@@ -15,8 +17,6 @@ describe('MongoDb user repository', () => {
   });
 
   it('should add an user when the same is added, it should exist', async () => {
-    const userRepository = new MongodbUserRepository();
-
     await userRepository.add({
       name: 'John Doe',
       email: 'john_doe@email.com',
@@ -28,8 +28,6 @@ describe('MongoDb user repository', () => {
   });
 
   it('should be able return true when user is added, it should exist', async () => {
-    const userRepository = new MongodbUserRepository();
-
     const user = {
       name: 'any_name',
       email: 'any_email@mail.com',
@@ -41,8 +39,6 @@ describe('MongoDb user repository', () => {
   });
 
   it('should be able return false when user is not added, it should not exist', async () => {
-    const userRepository = new MongodbUserRepository();
-
     expect(
       await userRepository.exists({
         name: 'any_name',
@@ -52,8 +48,6 @@ describe('MongoDb user repository', () => {
   });
 
   it('should return all users added', async () => {
-    const userRepository = new MongodbUserRepository();
-
     await Promise.all([
       userRepository.add({
         name: 'John Doe',
