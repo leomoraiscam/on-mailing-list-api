@@ -1,6 +1,20 @@
 version: '3.7'
 
 services:
+  app:
+    build:
+      context: .
+    container_name: mailing-list-api
+    depends_on:
+      - mailing-list-database
+    volumes:
+      - .:/home/node/app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+      - ${APP_PORT_DEBUG}:${APP_PORT_DEBUG}
+    networks:
+      - mailing-list-network
+
   mailing-list-database:
     image: mongo
     container_name: mailing-list-database
@@ -10,9 +24,9 @@ services:
       - MONGODB_PASSWORD=${MONGO_PASS}
       - MONGODB_DATABASE=${MONGO_DB}
     ports:
-      - "15017:27017"
+      - ${MONGO_PORT}:${MONGO_PORT}
     volumes:
-      -  mailing-list-data:/data/db
+      - mailing-list-data:/data/db
     networks:
       - mailing-list-network
 
