@@ -9,8 +9,8 @@
     "start:dev": "ts-node-dev -r tsconfig-paths/register src/main/server.ts",
     "test": "jest --passWithNoTests --noStackTrace --runInBand",
     "test-verbose": "jest --passWithNoTests --runInBand",
-    "test-unit": "npm test -- -c jest-unit-config.js",
-    "test-integration": "npm test -- -c jest-integration-config.js",
+    "test-unit": "npm test -- -c ./jest/jest-unit-config.js",
+    "test-integration": "npm test -- -c ./jest/jest-integration-config.js",
     "test-staged": "npm test -- --findRelatedTests",
     "test-ci": "npm test -- --coverage"
   },
