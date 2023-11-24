@@ -14,6 +14,8 @@ RUN yarn
 
 COPY --chown=node:node . .
 
+RUN yarn build
+
 EXPOSE 3333
 
-CMD ["yarn", "start:dev"]
+CMD ["yarn", "start"]
