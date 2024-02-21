@@ -5,6 +5,7 @@ import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-ma
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 
 const users: UserData[] = [];
+
 const loggerService = {
   log: jest.fn(),
 };
@@ -30,5 +31,10 @@ describe('Register user on mailing list use case', () => {
 
     expect((await addedUser).name).toBe('John Doe');
     expect(response.name).toBe('John Doe');
+    expect(loggerService.log).toHaveBeenCalledTimes(1);
+    expect(loggerService.log).toHaveBeenCalledWith(
+      'log',
+      `RegisterUserOnMailingListUseCase [{"email":{"email":"john_doe@email.com"},"name":{"name":"John Doe"}}] - Recipient added`
+    );
   });
 });
