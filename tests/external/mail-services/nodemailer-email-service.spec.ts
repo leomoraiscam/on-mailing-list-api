@@ -3,14 +3,15 @@ import { NodemailerEmailService } from '@/external/mail-services/nodemailer-emai
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
 import { mailOptions } from '@test/fixtures/stubs/email-options-stub';
 
-jest.mock('nodemailer');
+const mockSendMail = jest.fn();
 
-const nodemailer = require('nodemailer');
+jest.mock('nodemailer', () => ({
+  createTransport: jest.fn(() => ({
+    sendMail: mockSendMail,
+  })),
+}));
 
-const sendMailMock = jest.fn().mockReturnValueOnce('ok');
 let nodemailerEmailService: NodemailerEmailService;
-
-nodemailer.createTransport.mockReturnValue({ sendMail: sendMailMock });
 
 const loggerService = {
   log: jest.fn(),
@@ -19,38 +20,29 @@ const loggerService = {
 describe('Nodemailer mail service external adapter', () => {
   beforeEach(() => {
     nodemailerEmailService = new NodemailerEmailService(loggerService);
+  });
 
-    sendMailMock.mockClear();
-    nodemailer.createTransport.mockClear();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should return ok if email is sent', async () => {
+    mockSendMail.mockResolvedValue('ok');
+
     const result = await nodemailerEmailService.send(mailOptions);
 
+    expect(mockSendMail).toBeCalledWith(mailOptions);
+    expect(mockSendMail).toBeCalledTimes(1);
     expect(result.value).toEqual(mailOptions);
   });
 
-  it.skip('should call nodemailer createTransport with correct options', async () => {
-    const spyCreateTransport = jest.spyOn(nodemailer, 'createTransport');
-
-    await nodemailerEmailService.send(mailOptions);
-
-    expect(spyCreateTransport).toHaveBeenCalledWith({
-      host: 'localhost',
-      port: 8671,
-      auth: {
-        user: 'fakeMailConfiguration',
-        pass: '123456',
-      },
-    });
-  });
-
   it('should return error if email is not sent', async () => {
-    sendMailMock.mockImplementationOnce(() => {
+    mockSendMail.mockImplementationOnce(() => {
       throw new Error();
     });
 
     const result = await nodemailerEmailService.send(mailOptions);
+
     expect(result.value).toBeInstanceOf(MailServiceError);
   });
 });
