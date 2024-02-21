@@ -1,4 +1,5 @@
 import { UserData } from '@/dtos/user-data';
+import { UseCase } from '@/usecases/ports/use-case';
 import { RegisterAndSendEmailResponse } from '@/usecases/register-user-and-send-email/register-user-and-send-email-response';
 
 import { ControllerError } from './errors/controller-error';
@@ -6,7 +7,6 @@ import { MissingParamError } from './errors/missing-param-error';
 import { badRequest, created, serverError } from './helper/http-helper';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
-import { UseCase } from './ports/use-case';
 
 export class RegisterUserAndSendEmailController {
   private readonly usecase: UseCase<UserData, RegisterAndSendEmailResponse>;
