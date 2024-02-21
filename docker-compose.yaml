@@ -37,6 +37,6 @@ volumes:
 networks:
   mailing-list-network:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 172.16.57.0/24
+    # ipam:
+    #   config:
+    #     - subnet: 172.16.57.0/24

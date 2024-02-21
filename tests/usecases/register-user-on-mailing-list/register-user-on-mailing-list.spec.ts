@@ -1,8 +1,8 @@
 import { UserData } from '@/dtos/user-data';
 import { User } from '@/entities/user';
-import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
+import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
+import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
 import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
-import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 
 const users: UserData[] = [];
 const mockLoggerService = {

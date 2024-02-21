@@ -3,9 +3,9 @@ import { User } from '@/entities/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either } from '@/shared/either';
 
+import { EmailService } from '../../external/mail-services/ports/email-service';
 import { MailServiceError } from '../errors/mail-service-error';
 import { UseCase } from '../ports/use-case';
-import { EmailService } from './ports/email-service';
 
 export class SendEmailUseCase
   implements UseCase<User, Either<MailServiceError, EmailOptions>>

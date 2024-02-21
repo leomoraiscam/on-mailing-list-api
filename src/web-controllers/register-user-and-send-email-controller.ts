@@ -1,8 +1,5 @@
 import { UserData } from '@/dtos/user-data';
-import { InvalidEmailError } from '@/entities/errors/invalid-email-error';
-import { InvalidNameError } from '@/entities/errors/invalid-name-error';
-import { Either } from '@/shared/either';
-import { MailServiceError } from '@/usecases/errors/mail-service-error';
+import { RegisterAndSendEmailResponse } from '@/usecases/register-user-and-send-email/register-user-and-send-email-response';
 
 import { ControllerError } from './errors/controller-error';
 import { MissingParamError } from './errors/missing-param-error';
@@ -12,17 +9,9 @@ import { HttpResponse } from './ports/http-response';
 import { UseCase } from './ports/use-case';
 
 export class RegisterUserAndSendEmailController {
-  private readonly usecase: UseCase<
-    UserData,
-    Either<InvalidNameError | InvalidEmailError | MailServiceError, UserData>
-  >;
+  private readonly usecase: UseCase<UserData, RegisterAndSendEmailResponse>;
 
-  constructor(
-    usecase: UseCase<
-      UserData,
-      Either<InvalidNameError | InvalidEmailError | MailServiceError, UserData>
-    >
-  ) {
+  constructor(usecase: UseCase<UserData, RegisterAndSendEmailResponse>) {
     this.usecase = usecase;
   }
 

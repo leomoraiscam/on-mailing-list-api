@@ -1,5 +1,5 @@
 import { UserData } from '@/dtos/user-data';
-import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
+import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
 
 let users: UserData[] = [];
 let inMemoryUserRepository: InMemoryUserRepository;

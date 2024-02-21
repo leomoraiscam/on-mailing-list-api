@@ -1,8 +1,8 @@
 import { UserData } from '@/dtos/user-data';
+import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
+import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
 import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
-import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/user-repository';
 import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
-import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { MailServiceMock } from '@test/fixtures/mocks/mail-service-mock';
 import { mailOptions } from '@test/fixtures/stubs/email-options-stub';

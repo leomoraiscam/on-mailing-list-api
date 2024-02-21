@@ -5,17 +5,13 @@ import { User } from '@/entities/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either, left, right } from '@/shared/either';
 
-import { MailServiceError } from '../errors/mail-service-error';
 import { UseCase } from '../ports/use-case';
 import { RegisterUserOnMailingListUseCase } from '../register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import { SendEmailUseCase } from '../send-email/send-email-use-case';
+import { RegisterAndSendEmailResponse } from './register-user-and-send-email-response';
 
 export class RegisterUserAndSendEmailUseCase
-  implements
-    UseCase<
-      UserData,
-      Either<InvalidNameError | InvalidEmailError | MailServiceError, UserData>
-    >
+  implements UseCase<UserData, RegisterAndSendEmailResponse>
 {
   private registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
 
@@ -33,11 +29,7 @@ export class RegisterUserAndSendEmailUseCase
     this.loggerService = loggerService;
   }
 
-  async perform(
-    request: UserData
-  ): Promise<
-    Either<InvalidNameError | InvalidEmailError | MailServiceError, UserData>
-  > {
+  async perform(request: UserData): Promise<RegisterAndSendEmailResponse> {
     const userOrError: Either<InvalidNameError | InvalidEmailError, User> =
       User.create(request);
 

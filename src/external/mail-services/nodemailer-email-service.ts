@@ -1,9 +1,9 @@
 import * as nodemailer from 'nodemailer';
 
 import { EmailOptions } from '@/dtos/email-options';
+import { EmailService } from '@/external/mail-services/ports/email-service';
 import { Either, left, right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
-import { EmailService } from '@/usecases/send-email/ports/email-service';
 
 import { LoggerService } from '../logger-services/ports/logger-service';
 

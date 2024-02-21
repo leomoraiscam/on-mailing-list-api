@@ -2,24 +2,21 @@ import { EmailOptions } from '@/dtos/email-options';
 
 const attachments = [
   {
-    filename: 'clean-architecture.pdf',
+    filename: 'example-file.pdf',
     path: process.env.FILE_PATH || '',
   },
 ];
 
-const fromName = 'Equipe mailing list';
-const fromEmail = 'groupmailinglist@mail.com';
-
 export function getEmailOptions(): EmailOptions {
-  const from = `${fromName} | <${fromEmail}>`;
+  const from = `Equipe mailing list' | OnMailingList <groupmailinglist@mail.com>`;
   const to = '';
 
   const mailOptions: EmailOptions = {
     from,
     to,
     subject: 'Attachments e-mail',
-    text: 'Hello world attachment test',
-    html: '<b>Hello world attachment test</b>',
+    text: 'Hello world attachment',
+    html: '<b>Hello world attachment</b>',
     attachments,
   };
 
