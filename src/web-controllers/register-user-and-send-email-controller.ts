@@ -1,17 +1,19 @@
 import { UserData } from '@/dtos/user-data';
 
+import { RegisterUserAndSendEmailUseCase } from '../usecases/register-user-and-send-email/register-user-and-send-email-use-case';
 import { ControllerError } from './errors/controller-error';
 import { MissingParamError } from './errors/missing-param-error';
 import { badRequest, created, serverError } from './helper/http-helper';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
-import { UseCase } from './ports/use-case';
 
 export class RegisterUserAndSendEmailController {
-  private readonly usecase: UseCase;
+  private readonly registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
 
-  constructor(usecase: UseCase) {
-    this.usecase = usecase;
+  constructor(
+    registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase
+  ) {
+    this.registerUserAndSendEmailUseCase = registerUserAndSendEmailUseCase;
   }
 
   async handle(
@@ -27,7 +29,9 @@ export class RegisterUserAndSendEmailController {
       }
 
       const userData = request.body as UserData;
-      const response = await this.usecase.perform(userData);
+      const response = await this.registerUserAndSendEmailUseCase.perform(
+        userData
+      );
 
       if (response.isLeft()) {
         return badRequest<ControllerError>(response.value);
