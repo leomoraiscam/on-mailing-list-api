@@ -1,19 +1,29 @@
 import { UserData } from '@/dtos/user-data';
+import { InvalidEmailError } from '@/entities/errors/invalid-email-error';
+import { InvalidNameError } from '@/entities/errors/invalid-name-error';
+import { Either } from '@/shared/either';
+import { MailServiceError } from '@/usecases/errors/mail-service-error';
 
-import { RegisterUserAndSendEmailUseCase } from '../usecases/register-user-and-send-email/register-user-and-send-email-use-case';
 import { ControllerError } from './errors/controller-error';
 import { MissingParamError } from './errors/missing-param-error';
 import { badRequest, created, serverError } from './helper/http-helper';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
+import { UseCase } from './ports/use-case';
 
 export class RegisterUserAndSendEmailController {
-  private readonly registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
+  private readonly usecase: UseCase<
+    UserData,
+    Either<InvalidNameError | InvalidEmailError | MailServiceError, UserData>
+  >;
 
   constructor(
-    registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase
+    usecase: UseCase<
+      UserData,
+      Either<InvalidNameError | InvalidEmailError | MailServiceError, UserData>
+    >
   ) {
-    this.registerUserAndSendEmailUseCase = registerUserAndSendEmailUseCase;
+    this.usecase = usecase;
   }
 
   async handle(
@@ -29,9 +39,7 @@ export class RegisterUserAndSendEmailController {
       }
 
       const userData = request.body as UserData;
-      const response = await this.registerUserAndSendEmailUseCase.perform(
-        userData
-      );
+      const response = await this.usecase.perform(userData);
 
       if (response.isLeft()) {
         return badRequest<ControllerError>(response.value);
