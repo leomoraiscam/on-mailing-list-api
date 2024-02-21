@@ -10,7 +10,7 @@ import {
 import { MailServiceErrorStub } from '@test/fixtures/stubs/mail-service-error-stub';
 import { MailServiceStub } from '@test/fixtures/stubs/mail-service-stub';
 
-const loggerService = {
+const mockLoggerService = {
   log: jest.fn(),
 };
 
@@ -21,7 +21,7 @@ describe('Register and send email to user use case', () => {
     const sendEmailUseCase = new SendEmailUseCase(
       mailOptions,
       mailServiceStub,
-      loggerService
+      mockLoggerService
     );
 
     const user = User.create({
@@ -43,7 +43,7 @@ describe('Register and send email to user use case', () => {
     const sendEmailUseCase = new SendEmailUseCase(
       mailOptions,
       mailServiceErrorStub,
-      loggerService
+      mockLoggerService
     );
 
     const user = User.create({

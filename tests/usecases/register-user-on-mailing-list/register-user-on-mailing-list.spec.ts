@@ -5,8 +5,7 @@ import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-ma
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 
 const users: UserData[] = [];
-
-const loggerService = {
+const mockLoggerService = {
   log: jest.fn(),
 };
 
@@ -15,11 +14,11 @@ describe('Register user on mailing list use case', () => {
     const userRepository: UserRepository = new InMemoryUserRepository(users);
 
     const registerUserOnMailingList: RegisterUserOnMailingListUseCase =
-      new RegisterUserOnMailingListUseCase(userRepository, loggerService);
+      new RegisterUserOnMailingListUseCase(userRepository, mockLoggerService);
 
     const data = {
-      name: 'John Doe',
-      email: 'john_doe@email.com',
+      name: 'Jayden Mack',
+      email: 'ita@odon.lt',
     };
 
     const user = User.create({ ...data }).value as User;
@@ -29,12 +28,12 @@ describe('Register user on mailing list use case', () => {
     const { email } = data;
     const addedUser = userRepository.findUserByEmail(email);
 
-    expect((await addedUser).name).toBe('John Doe');
-    expect(response.name).toBe('John Doe');
-    expect(loggerService.log).toHaveBeenCalledTimes(1);
-    expect(loggerService.log).toHaveBeenCalledWith(
+    expect((await addedUser).name).toBe('Jayden Mack');
+    expect(response.name).toBe('Jayden Mack');
+    expect(mockLoggerService.log).toHaveBeenCalledTimes(1);
+    expect(mockLoggerService.log).toHaveBeenCalledWith(
       'log',
-      `RegisterUserOnMailingListUseCase [{"email":{"email":"john_doe@email.com"},"name":{"name":"John Doe"}}] - Recipient added`
+      `RegisterUserOnMailingListUseCase [{"email":{"email":"${data.email}"},"name":{"name":"${data.name}"}}] - Recipient added`
     );
   });
 });

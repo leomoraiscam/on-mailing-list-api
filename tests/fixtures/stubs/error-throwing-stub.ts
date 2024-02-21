@@ -13,7 +13,7 @@ export class ErrorThrowingUseCaseStub
     >
 {
   async perform(
-    request: UserData
+    _: UserData
   ): Promise<
     Either<InvalidNameError | InvalidEmailError | MailServiceError, UserData>
   > {

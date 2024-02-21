@@ -3,21 +3,21 @@ import { User } from '@/entities/user';
 describe('User Domain Entity', () => {
   it('should create user with valid data', () => {
     const userOrError = User.create({
-      name: 'any',
-      email: 'local_partl@domain.com',
+      name: 'Charlotte Johnson',
+      email: 'sot@pub.ck',
     });
 
     const user = userOrError.value as User;
 
-    expect(user.name.value).toEqual('any');
-    expect(user.email.value).toEqual('local_partl@domain.com');
+    expect(user.name.value).toEqual('Charlotte Johnson');
+    expect(user.email.value).toEqual('sot@pub.ck');
   });
 
   it('should not create user with invalid email address', () => {
     const invalidEmail = 'local_domain.com';
 
     const userOrError = User.create({
-      name: 'John doe',
+      name: 'Stephen Pearson',
       email: invalidEmail,
     });
 
@@ -32,7 +32,7 @@ describe('User Domain Entity', () => {
 
     const userOrError = User.create({
       name: invalidName,
-      email: 'local@domain.com',
+      email: 'egzeelu@far.be',
     });
 
     const error = userOrError.value as Error;
@@ -46,7 +46,7 @@ describe('User Domain Entity', () => {
 
     const userOrError = User.create({
       name: invalid_name,
-      email: 'local_partl@domain.com',
+      email: 'sakuta@pad.nu',
     });
 
     const error = userOrError.value as Error;

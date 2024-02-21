@@ -15,15 +15,14 @@ import { mailOptions } from '@test/fixtures/stubs/email-options-stub';
 import { ErrorThrowingUseCaseStub } from '@test/fixtures/stubs/error-throwing-stub';
 import { MailServiceStub } from '@test/fixtures/stubs/mail-service-stub';
 
-let mailServiceStub: MailServiceStub;
-
 let users: UserData[];
 let userRepository: UserRepository;
 let registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
 let sendEmailUseCase: SendEmailUseCase;
 let registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
 let registerUserAndSendEmailController: RegisterUserAndSendEmailController;
-const loggerService = {
+let mailServiceStub: MailServiceStub;
+const mockLoggerService = {
   log: jest.fn(),
 };
 
@@ -35,17 +34,17 @@ describe('Register user web controller', () => {
     userRepository = new InMemoryUserRepository(users);
     registerUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(
       userRepository,
-      loggerService
+      mockLoggerService
     );
     sendEmailUseCase = new SendEmailUseCase(
       mailOptions,
       mailServiceStub,
-      loggerService
+      mockLoggerService
     );
     registerUserAndSendEmailUseCase = new RegisterUserAndSendEmailUseCase(
       registerUserOnMailingListUseCase,
       sendEmailUseCase,
-      loggerService
+      mockLoggerService
     );
     registerUserAndSendEmailController = new RegisterUserAndSendEmailController(
       registerUserAndSendEmailUseCase
@@ -55,8 +54,8 @@ describe('Register user web controller', () => {
   it('should return status code 201 when request contains valid user data', async () => {
     const request: HttpRequest<UserData> = {
       body: {
-        name: 'John Doe',
-        email: 'john_doe@email.com',
+        name: 'Evan Nelson',
+        email: 'zarmuov@etedo.vn',
       },
     };
 
@@ -71,7 +70,7 @@ describe('Register user web controller', () => {
     const requestWithInvalidName: HttpRequest<UserData> = {
       body: {
         name: 'A',
-        email: 'john_doe@email.com',
+        email: 'wo@luhe.mr',
       },
     };
 
@@ -85,8 +84,8 @@ describe('Register user web controller', () => {
   it('should return status code 400 when request contains invalid user email', async () => {
     const requestWithInvalidEmail: HttpRequest<UserData> = {
       body: {
-        name: 'John Doe',
-        email: 'johnDoe.com',
+        name: 'Cornelia Pena',
+        email: 'wrongEmail.com',
       },
     };
 
@@ -100,7 +99,7 @@ describe('Register user web controller', () => {
   it('should return status code 400 when request is missing user name', async () => {
     const requestMissingName: HttpRequest<Partial<UserData>> = {
       body: {
-        email: 'john_doe@email.com',
+        email: 'mo@ebe.cf',
       },
     };
 
@@ -117,7 +116,7 @@ describe('Register user web controller', () => {
   it('should return status code 400 when request is missing user email', async () => {
     const requestMissingEmail: HttpRequest<Partial<UserData>> = {
       body: {
-        name: 'John Doe',
+        name: 'Leo Abbott',
       },
     };
 
@@ -153,8 +152,8 @@ describe('Register user web controller', () => {
 
     const request: HttpRequest<UserData> = {
       body: {
-        name: 'John Doe',
-        email: 'john_doe@email.com',
+        name: 'Bradley May',
+        email: 'za@lisop.gs',
       },
     };
 

@@ -5,7 +5,7 @@ export const emailData = {
   fromName: 'Equipe mailing list',
   fromEmail: 'groupmailinglist@mail.com',
   toName: 'John Doe',
-  toEmail: 'jonh_doe@mail.com',
+  toEmail: 'jonhDoe@mail.com',
   subject: 'Test e-mail',
   emailBody: 'Hello world attachment test',
   emailBodyHTML: '<b>Hello world attachment test</b>',
