@@ -4,9 +4,8 @@ import { UserRepository } from '@/usecases/register-user-on-mailing-list/ports/u
 import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
 import { InMemoryUserRepository } from '@/usecases/register-user-on-mailing-list/repositories/in-memory-user-repository';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
-
-import { MailServiceMock } from '../../fixtures/mocks/mail-service-mock';
-import { mailOptions } from '../../fixtures/stubs/email-options-stub';
+import { MailServiceMock } from '@test/fixtures/mocks/mail-service-mock';
+import { mailOptions } from '@test/fixtures/stubs/email-options-stub';
 
 let users: UserData[];
 let userRepository: UserRepository;

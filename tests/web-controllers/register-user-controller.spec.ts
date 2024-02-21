@@ -11,10 +11,9 @@ import { MissingParamError } from '@/web-controllers/errors/missing-param-error'
 import { HttpRequest } from '@/web-controllers/ports/http-request';
 import { HttpResponse } from '@/web-controllers/ports/http-response';
 import { RegisterUserAndSendEmailController } from '@/web-controllers/register-user-and-send-email-controller';
-
-import { mailOptions } from '../fixtures/stubs/email-options-stub';
-import { ErrorThrowingUseCaseStub } from '../fixtures/stubs/error-throwing-stub';
-import { MailServiceStub } from '../fixtures/stubs/mail-service-stub';
+import { mailOptions } from '@test/fixtures/stubs/email-options-stub';
+import { ErrorThrowingUseCaseStub } from '@test/fixtures/stubs/error-throwing-stub';
+import { MailServiceStub } from '@test/fixtures/stubs/mail-service-stub';
 
 let mailServiceStub: MailServiceStub;
 

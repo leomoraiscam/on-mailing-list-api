@@ -3,13 +3,12 @@ import { User } from '@/entities/user';
 import { Right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
-
 import {
   mailOptions,
   emailData,
-} from '../../fixtures/stubs/email-options-stub';
-import { MailServiceErrorStub } from '../../fixtures/stubs/mail-service-error-stub';
-import { MailServiceStub } from '../../fixtures/stubs/mail-service-stub';
+} from '@test/fixtures/stubs/email-options-stub';
+import { MailServiceErrorStub } from '@test/fixtures/stubs/mail-service-error-stub';
+import { MailServiceStub } from '@test/fixtures/stubs/mail-service-stub';
 
 const loggerService = {
   log: jest.fn(),

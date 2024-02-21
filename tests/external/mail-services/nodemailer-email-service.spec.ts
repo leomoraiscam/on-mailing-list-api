@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { NodemailerEmailService } from '@/external/mail-services/nodemailer-email-service';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
-
-import { mailOptions } from '../../fixtures/stubs/email-options-stub';
+import { mailOptions } from '@test/fixtures/stubs/email-options-stub';
 
 jest.mock('nodemailer');
 
