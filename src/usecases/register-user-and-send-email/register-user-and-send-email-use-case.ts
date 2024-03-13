@@ -6,7 +6,7 @@ import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either, left, right } from '@/shared/either';
 
 import { UseCase } from '../ports/use-case';
-import { RegisterUserOnMailingListUseCase } from '../register-user-on-mailing-list/register-user-on-mailing-list-use-case';
+import { RegisterUserOnMailingListUseCase } from '../register-user/register-user-on-mailing-list-use-case';
 import { SendEmailUseCase } from '../send-email/send-email-use-case';
 import { RegisterAndSendEmailResponse } from './register-user-and-send-email-response';
 

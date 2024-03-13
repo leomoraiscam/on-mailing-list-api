@@ -4,7 +4,7 @@ import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
 import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
 import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
 import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
-import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
+import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user/register-user-on-mailing-list-use-case';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { ControllerError } from '@/web-controllers/errors/controller-error';
 import { MissingParamError } from '@/web-controllers/errors/missing-param-error';

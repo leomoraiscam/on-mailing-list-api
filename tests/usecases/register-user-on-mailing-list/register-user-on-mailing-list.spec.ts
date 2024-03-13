@@ -1,39 +1,38 @@
 import { UserData } from '@/dtos/user-data';
-import { User } from '@/entities/user';
+import { User } from '@/entities/user/user';
 import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
 import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
-import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user-on-mailing-list/register-user-on-mailing-list-use-case';
+import { RegisterUserUseCase } from '@/usecases/register-user/register-user-use-case';
 
 const users: UserData[] = [];
 const mockLoggerService = {
   log: jest.fn(),
 };
 
-describe('Register user on mailing list use case', () => {
-  it('should add user with complete data to mailing list', async () => {
+describe('Register User Use Case', () => {
+  it('should add user on mailing list when receive correct data', async () => {
+    const name = 'Jayden Mack';
+    const email = 'ita@odon.lt';
+
     const userRepository: UserRepository = new InMemoryUserRepository(users);
 
-    const registerUserOnMailingList: RegisterUserOnMailingListUseCase =
-      new RegisterUserOnMailingListUseCase(userRepository, mockLoggerService);
+    const registerUserUseCase: RegisterUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      mockLoggerService
+    );
 
-    const data = {
-      name: 'Jayden Mack',
-      email: 'ita@odon.lt',
-    };
+    const user = User.create({ name, email }).value as User;
 
-    const user = User.create({ ...data }).value as User;
+    const response = await registerUserUseCase.perform(user);
 
-    const response = await registerUserOnMailingList.perform(user);
-
-    const { email } = data;
     const addedUser = userRepository.findUserByEmail(email);
 
-    expect((await addedUser).name).toBe('Jayden Mack');
-    expect(response.name).toBe('Jayden Mack');
+    expect((await addedUser).name).toBe(name);
+    expect(response.name).toBe(name);
     expect(mockLoggerService.log).toHaveBeenCalledTimes(1);
     expect(mockLoggerService.log).toHaveBeenCalledWith(
       'log',
-      `RegisterUserOnMailingListUseCase [{"email":{"email":"${data.email}"},"name":{"name":"${data.name}"}}] - Recipient added`
+      `RegisterUserUseCase [{"email":{"email":"${email}"},"name":{"name":"${name}"}}] - Recipient added`
     );
   });
 });
