@@ -1,6 +1,6 @@
 import { WinstonLoggerService } from '@/external/logger-services/wintson-logger-services';
 import { NodemailerEmailService } from '@/external/mail-services/nodemailer-email-service';
-import { MongodbUserRepository } from '@/external/repositories/mongodb/mongodb-user-repository';
+import { MongodbUserRepository } from '@/external/repositories/mongodb/implementations/mongodb-user-repository';
 import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
 import { RegisterUserUseCase } from '@/usecases/register-user/register-user-use-case';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';

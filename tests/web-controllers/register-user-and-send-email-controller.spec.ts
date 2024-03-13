@@ -1,9 +1,9 @@
 import { UserData } from '@/dtos/user-data';
 import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
 import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
-import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
 import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
 import { RegisterUserUseCase } from '@/usecases/register-user/register-user-use-case';
+import { InMemoryUserRepository } from '@/usecases/register-user/repositories/in-memory/in-memory-user-repository';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { ControllerError } from '@/web-controllers/errors/controller-error';
 import { MissingParamError } from '@/web-controllers/errors/missing-param-error';

@@ -1,5 +1,5 @@
 import { mongoHelper } from '@/external/repositories/mongodb/helpers/mongo-helper';
-import { MongodbUserRepository } from '@/external/repositories/mongodb/mongodb-user-repository';
+import { MongodbUserRepository } from '@/external/repositories/mongodb/implementations/mongodb-user-repository';
 
 let userRepository: MongodbUserRepository;
 

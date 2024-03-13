@@ -1,7 +1,7 @@
 import { UserData } from '@/dtos/user-data';
-import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
+import { UserRepository } from '@/usecases/register-user/repositories/ports/user-repository';
 
-import { mongoHelper } from './helpers/mongo-helper';
+import { mongoHelper } from '../helpers/mongo-helper';
 
 export class MongodbUserRepository implements UserRepository {
   async findAllUsers(): Promise<UserData[]> {

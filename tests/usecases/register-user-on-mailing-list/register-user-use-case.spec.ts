@@ -1,10 +1,8 @@
-import { UserData } from '@/dtos/user-data';
 import { User } from '@/entities/user/user';
-import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
-import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
 import { RegisterUserUseCase } from '@/usecases/register-user/register-user-use-case';
+import { InMemoryUserRepository } from '@/usecases/register-user/repositories/in-memory/in-memory-user-repository';
+import { UserRepository } from '@/usecases/register-user/repositories/ports/user-repository';
 
-const users: UserData[] = [];
 const mockLoggerService = {
   log: jest.fn(),
 };
@@ -14,7 +12,7 @@ describe('Register User Use Case', () => {
     const name = 'Jayden Mack';
     const email = 'ita@odon.lt';
 
-    const userRepository: UserRepository = new InMemoryUserRepository(users);
+    const userRepository: UserRepository = new InMemoryUserRepository();
 
     const registerUserUseCase: RegisterUserUseCase = new RegisterUserUseCase(
       userRepository,
