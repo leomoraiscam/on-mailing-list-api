@@ -9,10 +9,10 @@ import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
 
 export class RegisterUserAndSendEmailController {
-  private readonly usecase: UseCase<UserData, RegisterAndSendEmailResponse>;
+  private readonly useCase: UseCase<UserData, RegisterAndSendEmailResponse>;
 
-  constructor(usecase: UseCase<UserData, RegisterAndSendEmailResponse>) {
-    this.usecase = usecase;
+  constructor(useCase: UseCase<UserData, RegisterAndSendEmailResponse>) {
+    this.useCase = useCase;
   }
 
   async handle(
@@ -28,7 +28,7 @@ export class RegisterUserAndSendEmailController {
       }
 
       const userData = request.body as UserData;
-      const response = await this.usecase.perform(userData);
+      const response = await this.useCase.perform(userData);
 
       if (response.isLeft()) {
         return badRequest<ControllerError>(response.value);
