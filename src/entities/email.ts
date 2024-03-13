@@ -53,10 +53,10 @@ export class Email {
   }
 
   static create(email: string): Either<InvalidEmailError, Email> {
-    if (Email.validate(email)) {
-      return right(new Email(email));
+    if (!Email.validate(email)) {
+      return left(new InvalidEmailError(email));
     }
 
-    return left(new InvalidEmailError(email));
+    return right(new Email(email));
   }
 }

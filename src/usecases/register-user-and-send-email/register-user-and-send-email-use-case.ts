@@ -40,7 +40,6 @@ export class RegisterUserAndSendEmailUseCase
     const user: User = userOrError.value;
 
     await this.registerUserOnMailingListUseCase.perform(user);
-
     const result = await this.sendEmailUseCase.perform(user);
 
     if (result.isLeft()) {
