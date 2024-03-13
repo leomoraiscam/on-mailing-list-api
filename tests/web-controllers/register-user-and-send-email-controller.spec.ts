@@ -2,9 +2,8 @@ import { UserData } from '@/dtos/user-data';
 import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
 import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
 import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
-import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
 import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
-import { RegisterUserOnMailingListUseCase } from '@/usecases/register-user/register-user-on-mailing-list-use-case';
+import { RegisterUserUseCase } from '@/usecases/register-user/register-user-use-case';
 import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
 import { ControllerError } from '@/web-controllers/errors/controller-error';
 import { MissingParamError } from '@/web-controllers/errors/missing-param-error';
@@ -15,9 +14,8 @@ import { mailOptions } from '@test/fixtures/stubs/email-options-stub';
 import { ErrorThrowingUseCaseStub } from '@test/fixtures/stubs/error-throwing-stub';
 import { MailServiceStub } from '@test/fixtures/stubs/mail-service-stub';
 
-let users: UserData[];
-let userRepository: UserRepository;
-let registerUserOnMailingListUseCase: RegisterUserOnMailingListUseCase;
+let inMemoryUserRepository: InMemoryUserRepository;
+let registerUserUseCase: RegisterUserUseCase;
 let sendEmailUseCase: SendEmailUseCase;
 let registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
 let registerUserAndSendEmailController: RegisterUserAndSendEmailController;
@@ -26,14 +24,12 @@ const mockLoggerService = {
   log: jest.fn(),
 };
 
-describe('Register user web controller', () => {
+describe('Register user and Send email web controller', () => {
   beforeEach(() => {
     mailServiceStub = new MailServiceStub();
-
-    users = [];
-    userRepository = new InMemoryUserRepository(users);
-    registerUserOnMailingListUseCase = new RegisterUserOnMailingListUseCase(
-      userRepository,
+    inMemoryUserRepository = new InMemoryUserRepository();
+    registerUserUseCase = new RegisterUserUseCase(
+      inMemoryUserRepository,
       mockLoggerService
     );
     sendEmailUseCase = new SendEmailUseCase(
@@ -42,7 +38,7 @@ describe('Register user web controller', () => {
       mockLoggerService
     );
     registerUserAndSendEmailUseCase = new RegisterUserAndSendEmailUseCase(
-      registerUserOnMailingListUseCase,
+      registerUserUseCase,
       sendEmailUseCase,
       mockLoggerService
     );
