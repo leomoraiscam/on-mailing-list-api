@@ -1,5 +1,5 @@
 import { EmailOptions } from '@/dtos/email-options';
-import { User } from '@/entities/user';
+import { User } from '@/entities/user/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either } from '@/shared/either';
 
