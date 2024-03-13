@@ -1,6 +1,6 @@
 import { UserData } from '@/dtos/user-data';
-import { InvalidEmailError } from '@/entities/errors/invalid-email-error';
-import { InvalidNameError } from '@/entities/errors/invalid-name-error';
+import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
+import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
 import { User } from '@/entities/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either, left, right } from '@/shared/either';

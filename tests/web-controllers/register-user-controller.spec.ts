@@ -1,6 +1,6 @@
 import { UserData } from '@/dtos/user-data';
-import { InvalidEmailError } from '@/entities/errors/invalid-email-error';
-import { InvalidNameError } from '@/entities/errors/invalid-name-error';
+import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
+import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
 import { InMemoryUserRepository } from '@/external/repositories/mongodb/in-memory-user-repository';
 import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
 import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';

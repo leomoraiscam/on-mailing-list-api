@@ -1,5 +1,5 @@
 import { UserData } from '@/dtos/user-data';
-import { User } from '@/entities/user';
+import { User } from '@/entities/user/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
 
 import { UserRepository } from '../../external/repositories/mongodb/ports/user-repository';
