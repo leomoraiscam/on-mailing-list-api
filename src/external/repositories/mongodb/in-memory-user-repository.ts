@@ -5,10 +5,6 @@ import { UserRepository } from './ports/user-repository';
 export class InMemoryUserRepository implements UserRepository {
   private repository: UserData[] = [];
 
-  constructor(repository: UserData[]) {
-    this.repository = repository;
-  }
-
   async findAllUsers(): Promise<UserData[]> {
     return this.repository;
   }

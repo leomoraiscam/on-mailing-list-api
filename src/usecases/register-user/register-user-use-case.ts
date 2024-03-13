@@ -1,8 +1,8 @@
 import { UserData } from '@/dtos/user-data';
 import { User } from '@/entities/user/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
+import { UserRepository } from '@/external/repositories/mongodb/ports/user-repository';
 
-import { UserRepository } from '../../external/repositories/mongodb/ports/user-repository';
 import { UseCase } from '../ports/use-case';
 
 export class RegisterUserUseCase implements UseCase<User, UserData> {
