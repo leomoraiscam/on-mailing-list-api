@@ -44,7 +44,6 @@ export class SendEmailUseCase
     const sendMail: Either<MailServiceError, EmailOptions> =
       await this.emailService.send(emailInfo);
 
-    // TODO: test isLeft() flow, check if logger is called
     if (sendMail.isRight()) {
       this.loggerService.log(
         'log',
