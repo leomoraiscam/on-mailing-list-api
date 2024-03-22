@@ -45,7 +45,7 @@ export class RegisterUserAndSendEmailUseCase
     if (result.isLeft()) {
       this.loggerService.log(
         'error',
-        `${RegisterUserAndSendEmailUseCase.name} [${JSON.stringify(
+        `${RegisterUserAndSendEmailUseCase.name}: [${JSON.stringify(
           result.value
         )}]`
       );
@@ -55,7 +55,7 @@ export class RegisterUserAndSendEmailUseCase
 
     this.loggerService.log(
       'log',
-      `${RegisterUserAndSendEmailUseCase.name}  - Request completed with success`
+      `${RegisterUserAndSendEmailUseCase.name}: Request completed with success`
     );
 
     return right({

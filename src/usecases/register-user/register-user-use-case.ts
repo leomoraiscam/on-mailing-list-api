@@ -32,15 +32,22 @@ export class RegisterUserUseCase implements UseCase<User, UserData> {
 
       this.loggerService.log(
         'log',
-        `${RegisterUserUseCase.name} [${JSON.stringify(
+        `${RegisterUserUseCase.name}: [${JSON.stringify(
           request
-        )}] - Recipient added`
+        )}] - Recipient added on database`
       );
-    }
+    } else {
+      this.loggerService.log(
+        'log',
+        `${RegisterUserUseCase.name}: [${JSON.stringify(
+          request
+        )}] - Recipient already exist on database`
+      );
 
-    return {
-      name: request.name.value,
-      email: request.email.value,
-    };
+      return {
+        name: request.name.value,
+        email: request.email.value,
+      };
+    }
   }
 }

@@ -38,7 +38,7 @@ export class NodemailerEmailService implements EmailService {
 
       this.loggerService.log(
         'log',
-        `[${NodemailerEmailService.name}] - Message sent`,
+        `[${NodemailerEmailService.name}]: Message sent to ${options.to}`,
         {
           messageId: info.messageId,
         }
@@ -46,7 +46,7 @@ export class NodemailerEmailService implements EmailService {
     } catch (error) {
       this.loggerService.log(
         'error',
-        `[${NodemailerEmailService.name}] - Message sent failed`,
+        `[${NodemailerEmailService.name}]: Message sent failed - ${error.message}`,
         {
           messageId: JSON.stringify(error),
         }

@@ -47,7 +47,9 @@ export class SendEmailUseCase
     if (sendMail.isRight()) {
       this.loggerService.log(
         'log',
-        `${SendEmailUseCase.name} [${JSON.stringify(request)}] - Message sent`
+        `${SendEmailUseCase.name}: [${JSON.stringify(
+          request
+        )}] - Message sent to ${request.email.value}`
       );
     }
 
