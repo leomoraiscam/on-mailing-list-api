@@ -30,7 +30,31 @@ describe('Register User Use Case', () => {
     expect(mockLoggerService.log).toHaveBeenCalledTimes(1);
     expect(mockLoggerService.log).toHaveBeenCalledWith(
       'log',
-      `RegisterUserUseCase [{"email":{"email":"${email}"},"name":{"name":"${name}"}}] - Recipient added`
+      `RegisterUserUseCase: [{"email":{"email":"${email}"},"name":{"name":"${name}"}}] - Recipient added on database`
+    );
+  });
+
+  it('should return user on mailing list when the same already exist', async () => {
+    const name = 'Jayden Mack';
+    const email = 'ita@odon.lt';
+
+    const userRepository: UserRepository = new InMemoryUserRepository();
+
+    jest.spyOn(userRepository, 'exists').mockResolvedValueOnce(true);
+
+    const registerUserUseCase: RegisterUserUseCase = new RegisterUserUseCase(
+      userRepository,
+      mockLoggerService
+    );
+
+    const user = User.create({ name, email }).value as User;
+
+    await registerUserUseCase.perform(user);
+
+    expect(mockLoggerService.log).toHaveBeenCalledTimes(1);
+    expect(mockLoggerService.log).toHaveBeenCalledWith(
+      'log',
+      `RegisterUserUseCase: [{"email":{"email":"${email}"},"name":{"name":"${name}"}}] - Recipient already exist on database`
     );
   });
 });
