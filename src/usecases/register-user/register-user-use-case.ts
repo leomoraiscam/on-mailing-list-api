@@ -43,11 +43,11 @@ export class RegisterUserUseCase implements UseCase<User, UserData> {
           request
         )}] - Recipient already exist on database`
       );
-
-      return {
-        name: request.name.value,
-        email: request.email.value,
-      };
     }
+
+    return {
+      name: request.name.value,
+      email: request.email.value,
+    };
   }
 }

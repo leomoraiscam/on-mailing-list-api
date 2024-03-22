@@ -92,7 +92,7 @@ describe('Register and send email to user use case', () => {
     expect(mockLoggerService.log).toHaveBeenCalledTimes(2);
     expect(mockLoggerService.log).toHaveBeenCalledWith(
       'error',
-      `${RegisterUserAndSendEmailUseCase.name} [${JSON.stringify(
+      `${RegisterUserAndSendEmailUseCase.name}: [${JSON.stringify(
         result.value
       )}]`
     );
