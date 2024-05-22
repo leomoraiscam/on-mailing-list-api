@@ -1,10 +1,16 @@
 import { UserData } from '@/dtos/user-data';
+import { MailServiceError } from '@/usecases/errors/mail-service-error';
 import { UseCase } from '@/usecases/ports/use-case';
 import { RegisterAndSendEmailResponse } from '@/usecases/register-user-and-send-email/register-user-and-send-email-response';
 
 import { ControllerError } from './errors/controller-error';
 import { MissingParamError } from './errors/missing-param-error';
-import { badRequest, created, serverError } from './helper/http-helper';
+import {
+  badRequest,
+  created,
+  failDependency,
+  serverError,
+} from './helper/http-helper';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
 
@@ -17,7 +23,7 @@ export class RegisterUserAndSendEmailController {
 
   async handle(
     request: HttpRequest<UserData | Partial<UserData>>
-  ): Promise<HttpResponse<UserData | ControllerError>> {
+  ): Promise<HttpResponse<UserData | ControllerError | Error>> {
     try {
       if (!request.body.name || !request.body.email) {
         const missing = !request.body.name ? 'name' : 'email';
@@ -31,6 +37,11 @@ export class RegisterUserAndSendEmailController {
       const response = await this.useCase.perform(userData);
 
       if (response.isLeft()) {
+        const error = response.value;
+
+        if (error.name === MailServiceError.name)
+          return failDependency<ControllerError>(response.value);
+
         return badRequest<ControllerError>(response.value);
       }
 
