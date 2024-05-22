@@ -1,9 +1,9 @@
 import { EmailOptions } from '@/dtos/email-options';
 import { User } from '@/entities/user/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
+import { EmailService } from '@/external/mail-services/ports/email-service';
 import { Either } from '@/shared/either';
 
-import { EmailService } from '../../external/mail-services/ports/email-service';
 import { MailServiceError } from '../errors/mail-service-error';
 import { UseCase } from '../ports/use-case';
 
