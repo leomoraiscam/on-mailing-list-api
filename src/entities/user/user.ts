@@ -16,7 +16,9 @@ export class User {
     this.name = name;
   }
 
-  static create(userData: UserData): Either<InvalidEmailError, User> {
+  static create(
+    userData: UserData
+  ): Either<InvalidNameError | InvalidEmailError, User> {
     const nameOrError: Either<InvalidNameError, Name> = Name.create(
       userData.name
     );
