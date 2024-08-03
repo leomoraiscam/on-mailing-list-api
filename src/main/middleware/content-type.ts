@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 
 export const contentType = (
-  _: Request,
+  request: Request,
   response: Response,
   next: NextFunction
 ): void => {
-  response.type('json');
+  if (!request.path.startsWith('/api-docs')) {
+    response.type('json');
+  }
 
   next();
 };

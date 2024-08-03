@@ -1,0 +1,162 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Mailing List API - Swagger Documentation",
+    "description": "This API allows you to add a user to the main list to receive bonus emails",
+    "termsOfService": "http://swagger.io/terms/",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.11",
+    "host": "http://localhost:3333/api-docs"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333/api-docs"
+    }
+  ],
+  "tags": [
+    {
+      "name": "accounts",
+      "description": "Endpoints related to add accounts."
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": ["accounts"],
+        "summary": "Create a new account",
+        "description": "This endpoint allows the creation of a new account",
+        "operationId": "addAccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Account"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "This will be returned when the created a account resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "This will be returned when has validation error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "This will be returned when any dependency fails.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailDependencyError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "This will be returned when an unexpected error occurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account": {
+        "required": ["name", "email"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Jonh"
+          },
+          "email": {
+            "type": "string",
+            "example": "email@email.com"
+          }
+        }
+      },
+      "AccountResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Account"
+          }
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ValidationError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "name": "MissingParamError",
+              "message": "Missing \"property (example)\" parameter from request."
+            }
+          }
+        ]
+      },
+      "FailDependencyError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "status": "MailServiceError",
+              "message": "Mail service error."
+            }
+          }
+        ]
+      },
+      "InternalServerError": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Error"
+          },
+          {
+            "example": {
+              "status": "error",
+              "message": "Internal Server Error"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
