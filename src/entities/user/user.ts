@@ -7,13 +7,21 @@ import { InvalidNameError } from './errors/invalid-name-error';
 import { Name } from './name';
 
 export class User {
-  public readonly email: Email;
+  private readonly _email: Email;
 
-  public readonly name: Name;
+  private readonly _name: Name;
 
   constructor(name: Name, email: Email) {
-    this.email = email;
-    this.name = name;
+    this._email = email;
+    this._name = name;
+  }
+
+  get name(): Name {
+    return this._name;
+  }
+
+  get email(): Email {
+    return this._email;
   }
 
   static create(

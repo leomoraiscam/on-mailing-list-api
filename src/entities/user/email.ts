@@ -3,17 +3,17 @@ import { Either, left, right } from '@/shared/either';
 import { InvalidEmailError } from './errors/invalid-email-error';
 
 export class Email {
-  private readonly email: string;
+  private readonly _value: string;
 
   private constructor(email: string) {
-    this.email = email;
+    this._value = email;
   }
 
   public get value(): string {
-    return this.email;
+    return this._value;
   }
 
-  static validate(email: string): boolean {
+  public static validate(email: string): boolean {
     const emailRegex =
       /^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
 
@@ -52,7 +52,7 @@ export class Email {
     return true;
   }
 
-  static create(email: string): Either<InvalidEmailError, Email> {
+  public static create(email: string): Either<InvalidEmailError, Email> {
     if (!Email.validate(email)) {
       return left(new InvalidEmailError(email));
     }

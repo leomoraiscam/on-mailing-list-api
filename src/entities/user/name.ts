@@ -3,14 +3,14 @@ import { left, right, Either } from '@/shared/either';
 import { InvalidNameError } from './errors/invalid-name-error';
 
 export class Name {
-  private readonly name: string;
+  private readonly _value: string;
 
   private constructor(name: string) {
-    this.name = name;
+    this._value = name;
   }
 
   public get value(): string {
-    return this.name;
+    return this._value;
   }
 
   public static validate(name: string): boolean {

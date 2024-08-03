@@ -15,10 +15,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "@typescript-eslint",
-    "eslint-plugin-import-helpers"
-  ],
+  "plugins": ["@typescript-eslint", "eslint-plugin-import-helpers"],
   "rules": {
     "prettier/prettier": "error",
     "camelcase": "off",
@@ -27,6 +24,7 @@
     "@typescript-eslint/ban-types": "warn",
     "no-console": "error",
     "no-empty-function": "warn",
+    "no-underscore-dangle": "off",
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -50,7 +48,7 @@
   },
   "settings": {
     "import/resolver": {
-        "typescript": {}
+      "typescript": {}
     }
   }
 }
