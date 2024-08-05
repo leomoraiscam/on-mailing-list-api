@@ -1,5 +1,5 @@
 import { UserData } from '@/dtos/user-data';
-import { UserRepository } from '@/usecases/register-user/repositories/ports/user-repository';
+import { UserRepository } from '@/usecases/ports/repositories/user-repository';
 
 import { mongoHelper } from '../helpers/mongo-helper';
 

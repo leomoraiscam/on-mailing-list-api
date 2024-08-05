@@ -1,49 +1,39 @@
 import { UserData } from '@/dtos/user-data';
-import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
-import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
-import { RegisterUserAndSendEmailUseCase } from '@/usecases/register-user-and-send-email/register-user-and-send-email-use-case';
-import { RegisterUserUseCase } from '@/usecases/register-user/register-user-use-case';
-import { InMemoryUserRepository } from '@/usecases/register-user/repositories/in-memory/in-memory-user-repository';
-import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
+// import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
+// import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
+import { RegisterUser } from '@/usecases/register-user/register-user';
+import { SendEmailToUserWithBonus } from '@/usecases/send-email-to-user-with-bonus/send-email-to-user-with-bonus';
 import { ControllerError } from '@/web-controllers/errors/controller-error';
-import { MissingParamError } from '@/web-controllers/errors/missing-param-error';
+// import { MissingParamError } from '@/web-controllers/errors/missing-param-error';
 import { HttpRequest } from '@/web-controllers/ports/http-request';
 import { HttpResponse } from '@/web-controllers/ports/http-response';
-import { RegisterUserAndSendEmailController } from '@/web-controllers/register-user-and-send-email-controller';
-import { mailOptions } from '@test/fixtures/stubs/email-options-stub';
-import { ErrorThrowingUseCaseStub } from '@test/fixtures/stubs/error-throwing-stub';
-import { MailServiceStub } from '@test/fixtures/stubs/mail-service-stub';
+import { RegisterUserController } from '@/web-controllers/register-user-controller';
+import { InMemoryUserRepository } from '@test/doubles/repositories/in-memory-user-repository';
+import { mailOptions } from '@test/doubles/stubs/email-options-stub';
+import { MailServiceStub } from '@test/doubles/stubs/mail-service-stub';
 
 let inMemoryUserRepository: InMemoryUserRepository;
-let registerUserUseCase: RegisterUserUseCase;
-let sendEmailUseCase: SendEmailUseCase;
-let registerUserAndSendEmailUseCase: RegisterUserAndSendEmailUseCase;
-let registerUserAndSendEmailController: RegisterUserAndSendEmailController;
+let registerUser: RegisterUser;
+let sendEmailToUserWithBonus: SendEmailToUserWithBonus;
+let registerUserController: RegisterUserController;
 let mailServiceStub: MailServiceStub;
 const mockLoggerService = {
   log: jest.fn(),
 };
 
-describe('Register user and Send email web controller', () => {
+describe('Register user web controller', () => {
   beforeEach(() => {
     mailServiceStub = new MailServiceStub();
     inMemoryUserRepository = new InMemoryUserRepository();
-    registerUserUseCase = new RegisterUserUseCase(
-      inMemoryUserRepository,
-      mockLoggerService
-    );
-    sendEmailUseCase = new SendEmailUseCase(
+    registerUser = new RegisterUser(inMemoryUserRepository, mockLoggerService);
+    sendEmailToUserWithBonus = new SendEmailToUserWithBonus(
       mailOptions,
       mailServiceStub,
       mockLoggerService
     );
-    registerUserAndSendEmailUseCase = new RegisterUserAndSendEmailUseCase(
-      registerUserUseCase,
-      sendEmailUseCase,
-      mockLoggerService
-    );
-    registerUserAndSendEmailController = new RegisterUserAndSendEmailController(
-      registerUserAndSendEmailUseCase
+    registerUserController = new RegisterUserController(
+      registerUser,
+      sendEmailToUserWithBonus
     );
   });
 
@@ -56,7 +46,7 @@ describe('Register user and Send email web controller', () => {
     };
 
     const response: HttpResponse<UserData | ControllerError> =
-      await registerUserAndSendEmailController.handle(request);
+      await registerUserController.handle(request);
 
     expect(response.statusCode).toEqual(201);
     expect(response.body).toEqual(request.body);
@@ -71,10 +61,10 @@ describe('Register user and Send email web controller', () => {
     };
 
     const response: HttpResponse<UserData | ControllerError> =
-      await registerUserAndSendEmailController.handle(requestWithInvalidName);
+      await registerUserController.handle(requestWithInvalidName);
 
     expect(response.statusCode).toEqual(400);
-    expect(response.body).toBeInstanceOf(InvalidNameError);
+    expect(response.body.name).toEqual('InvalidNameError');
   });
 
   it('should return status code 400 when request contains invalid user email', async () => {
@@ -86,10 +76,10 @@ describe('Register user and Send email web controller', () => {
     };
 
     const response: HttpResponse<UserData | ControllerError> =
-      await registerUserAndSendEmailController.handle(requestWithInvalidEmail);
+      await registerUserController.handle(requestWithInvalidEmail);
 
     expect(response.statusCode).toEqual(400);
-    expect(response.body).toBeInstanceOf(InvalidEmailError);
+    expect(response.body.name).toEqual('InvalidEmailError');
   });
 
   it('should return status code 400 when request is missing user name', async () => {
@@ -100,12 +90,12 @@ describe('Register user and Send email web controller', () => {
     };
 
     const response: HttpResponse<UserData | ControllerError> =
-      await registerUserAndSendEmailController.handle(requestMissingName);
+      await registerUserController.handle(requestMissingName);
 
     expect(response.statusCode).toEqual(400);
-    expect(response.body).toBeInstanceOf(MissingParamError);
+    expect(response.body.name).toEqual('MissingParamError');
     expect((response.body as ControllerError).message).toEqual(
-      'Missing parameter from request: name.'
+      'Missing "name" parameter from request.'
     );
   });
 
@@ -117,12 +107,12 @@ describe('Register user and Send email web controller', () => {
     };
 
     const response: HttpResponse<UserData | ControllerError> =
-      await registerUserAndSendEmailController.handle(requestMissingEmail);
+      await registerUserController.handle(requestMissingEmail);
 
     expect(response.statusCode).toEqual(400);
-    expect(response.body).toBeInstanceOf(MissingParamError);
+    expect(response.body.name).toEqual('MissingParamError');
     expect((response.body as ControllerError).message).toEqual(
-      'Missing parameter from request: email.'
+      'Missing "email" parameter from request.'
     );
   });
 
@@ -132,20 +122,16 @@ describe('Register user and Send email web controller', () => {
     };
 
     const response: HttpResponse<Partial<UserData> | ControllerError> =
-      await registerUserAndSendEmailController.handle(
-        requestMissingNameAndEmail
-      );
+      await registerUserController.handle(requestMissingNameAndEmail);
 
     expect(response.statusCode).toEqual(400);
-    expect(response.body).toBeInstanceOf(MissingParamError);
+    expect(response.body.name).toEqual('MissingParamError');
     expect((response.body as ControllerError).message).toEqual(
-      'Missing parameter from request: name.'
+      'Missing "name" parameter from request.'
     );
   });
 
   it('should return status code 500 when server raises', async () => {
-    const errorThrowingUseCaseStub = new ErrorThrowingUseCaseStub();
-
     const request: HttpRequest<UserData> = {
       body: {
         name: 'Bradley May',
@@ -153,13 +139,26 @@ describe('Register user and Send email web controller', () => {
       },
     };
 
-    const controller: RegisterUserAndSendEmailController =
-      new RegisterUserAndSendEmailController(errorThrowingUseCaseStub);
+    const errorThrowingRegisterUserUseCaseStub = jest
+      .spyOn(registerUser, 'perform')
+      .mockImplementationOnce(() => {
+        throw Error();
+      }) as any;
+    const errorThrowingSendEmailToUserWithBonusUseCaseStub = jest
+      .spyOn(sendEmailToUserWithBonus, 'perform')
+      .mockImplementationOnce(() => {
+        throw Error();
+      }) as any;
+
+    const controller = new RegisterUserController(
+      errorThrowingRegisterUserUseCaseStub,
+      errorThrowingSendEmailToUserWithBonusUseCaseStub
+    );
 
     const response: HttpResponse<UserData | ControllerError> =
       await controller.handle(request);
 
     expect(response.statusCode).toEqual(500);
-    expect(response.body).toBeInstanceOf(Error);
+    expect(response.body.name).toEqual('TypeError');
   });
 });

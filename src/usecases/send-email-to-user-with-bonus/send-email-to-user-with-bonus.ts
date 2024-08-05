@@ -1,14 +1,17 @@
 import { EmailOptions } from '@/dtos/email-options';
+import { UserData } from '@/dtos/user-data';
+import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
+import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
 import { User } from '@/entities/user/user';
 import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { EmailService } from '@/external/mail-services/ports/email-service';
-import { Either } from '@/shared/either';
+import { Either, left, right } from '@/shared/either';
 
 import { MailServiceError } from '../errors/mail-service-error';
-import { UseCase } from '../ports/use-case';
+import { UseCase } from '../ports/services/use-case';
 
-export class SendEmailUseCase
-  implements UseCase<User, Either<MailServiceError, EmailOptions>>
+export class SendEmailToUserWithBonus
+  implements UseCase<UserData, Either<MailServiceError, EmailOptions>>
 {
   private readonly emailOptions: EmailOptions;
 
@@ -27,14 +30,21 @@ export class SendEmailUseCase
   }
 
   async perform(
-    request: User
+    request: UserData
   ): Promise<Either<MailServiceError, EmailOptions>> {
-    const greetings = `E ai <b>${request.name}</b>, beleza ?`;
-    const customizedHTML = `${greetings}<br><br>${this.emailOptions.html}`;
+    const userOrError: Either<InvalidNameError | InvalidEmailError, User> =
+      User.create(request);
 
+    if (userOrError.isLeft()) {
+      return left(userOrError.value);
+    }
+
+    const user = userOrError.value as User;
+    const greetings = `E ai <b>${user.name.value}</b>, beleza ?`;
+    const customizedHTML = `${greetings}<br><br>${this.emailOptions.html}`;
     const emailInfo: EmailOptions = {
       from: this.emailOptions.from,
-      to: `${request.name.value}<${request.email.value}>`,
+      to: `${user.name.value}<${user.email.value}>`,
       subject: this.emailOptions.subject,
       text: this.emailOptions.text,
       html: customizedHTML,
@@ -44,15 +54,19 @@ export class SendEmailUseCase
     const sendMail: Either<MailServiceError, EmailOptions> =
       await this.emailService.send(emailInfo);
 
+    if (sendMail.isLeft()) {
+      return left(new MailServiceError());
+    }
+
     if (sendMail.isRight()) {
       this.loggerService.log(
         'log',
-        `${SendEmailUseCase.name}: [${JSON.stringify(
+        `${SendEmailToUserWithBonus.name}: [${JSON.stringify(
           request
-        )}] - Message sent to ${request.email.value}`
+        )}] - Message sent to ${user.email.value}`
       );
     }
 
-    return sendMail;
+    return right(sendMail.value);
   }
 }

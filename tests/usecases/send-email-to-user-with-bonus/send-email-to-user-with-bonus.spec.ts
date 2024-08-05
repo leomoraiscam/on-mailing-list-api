@@ -1,14 +1,10 @@
 import { EmailOptions } from '@/dtos/email-options';
-import { User } from '@/entities/user/user';
 import { Right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
-import { SendEmailUseCase } from '@/usecases/send-email/send-email-use-case';
-import {
-  mailOptions,
-  emailData,
-} from '@test/fixtures/stubs/email-options-stub';
-import { MailServiceErrorStub } from '@test/fixtures/stubs/mail-service-error-stub';
-import { MailServiceStub } from '@test/fixtures/stubs/mail-service-stub';
+import { SendEmailToUserWithBonus } from '@/usecases/send-email-to-user-with-bonus/send-email-to-user-with-bonus';
+import { mailOptions, emailData } from '@test/doubles/stubs/email-options-stub';
+import { MailServiceErrorStub } from '@test/doubles/stubs/mail-service-error-stub';
+import { MailServiceStub } from '@test/doubles/stubs/mail-service-stub';
 
 const mockLoggerService = {
   log: jest.fn(),
@@ -17,19 +13,16 @@ const mockLoggerService = {
 describe('Send email Use Case', () => {
   it('should be able send email when received valid name and email address', async () => {
     const mailServiceStub = new MailServiceStub();
-
-    const sendEmailUseCase = new SendEmailUseCase(
+    const sendEmailToUserWithBonus = new SendEmailToUserWithBonus(
       mailOptions,
       mailServiceStub,
       mockLoggerService
     );
 
-    const user = User.create({
+    const response = await sendEmailToUserWithBonus.perform({
       name: emailData.toName,
       email: emailData.toEmail,
-    }).value as User;
-
-    const response = await sendEmailUseCase.perform(user);
+    });
 
     const objectValueResponse = response.value as EmailOptions;
 
@@ -41,18 +34,16 @@ describe('Send email Use Case', () => {
 
   it('should be able return error when email service fails', async () => {
     const mailServiceErrorStub = new MailServiceErrorStub();
-    const sendEmailUseCase = new SendEmailUseCase(
+    const sendEmailUseCase = new SendEmailToUserWithBonus(
       mailOptions,
       mailServiceErrorStub,
       mockLoggerService
     );
 
-    const user = User.create({
+    const response = await sendEmailUseCase.perform({
       name: emailData.toName,
       email: emailData.toEmail,
-    }).value as User;
-
-    const response = await sendEmailUseCase.perform(user);
+    });
 
     expect(response.value).toBeInstanceOf(MailServiceError);
   });

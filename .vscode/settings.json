@@ -1,0 +1,13 @@
+{
+  "liveServer.settings.port": 5501,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.vscode": false,
+    "node_modules": true,
+    ".husky": true,
+    "jest": true,
+    "dist": true,
+    "coverage": true,
+    "requirements": true
+  }
+}

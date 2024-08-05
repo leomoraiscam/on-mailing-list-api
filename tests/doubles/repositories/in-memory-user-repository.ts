@@ -1,6 +1,5 @@
 import { UserData } from '@/dtos/user-data';
-
-import { UserRepository } from '../ports/user-repository';
+import { UserRepository } from '@/usecases/ports/repositories/user-repository';
 
 export class InMemoryUserRepository implements UserRepository {
   private repository: UserData[] = [];

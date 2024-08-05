@@ -25,6 +25,7 @@
     "no-console": "error",
     "no-empty-function": "warn",
     "no-underscore-dangle": "off",
+    "lines-between-class-members": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

@@ -1,6 +1,6 @@
 import { NodemailerEmailService } from '@/external/mail-services/nodemailer-email-service';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
-import { mailOptions } from '@test/fixtures/stubs/email-options-stub';
+import { mailOptions } from '@test/doubles/stubs/email-options-stub';
 
 const mockSendMail = jest.fn();
 const mockLoggerService = {
