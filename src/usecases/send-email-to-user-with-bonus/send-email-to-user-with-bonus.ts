@@ -14,9 +14,7 @@ export class SendEmailToUserWithBonus
   implements UseCase<UserData, Either<MailServiceError, EmailOptions>>
 {
   private readonly emailOptions: EmailOptions;
-
   private readonly emailService: EmailService;
-
   private readonly loggerService: LoggerService;
 
   constructor(

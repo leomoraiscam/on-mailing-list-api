@@ -4,14 +4,14 @@ const { compilerOptions } = require('./tsconfig.json');
 
 module.exports = {
   preset: '@shelf/jest-mongodb',
-  roots: ['<rootDir>/tests'],
+  roots: ['<rootDir>/test'],
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   collectCoverageFrom: [
     '<rootDir>/src/**/*.ts',
-    '!**/tests/**',
+    '!**/test/**',
     '!**/config/**',
   ],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {

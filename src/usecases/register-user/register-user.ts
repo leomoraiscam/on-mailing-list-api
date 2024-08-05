@@ -13,7 +13,6 @@ export class RegisterUser
     UseCase<UserData, Either<InvalidNameError | InvalidEmailError, UserData>>
 {
   private readonly userRepository: UserRepository;
-
   private readonly loggerService: LoggerService;
 
   public constructor(
@@ -35,13 +34,12 @@ export class RegisterUser
     }
 
     const user: User = userOrError.value;
-    const existingUser = await this.userRepository.exists({
-      name: user.name.value,
-      email: user.email.value,
-    });
+    const existingUser = await this.userRepository.findByEmail(
+      user.email.value
+    );
 
     if (!existingUser) {
-      await this.userRepository.add({
+      await this.userRepository.create({
         name: user.name.value,
         email: user.email.value,
       });

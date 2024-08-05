@@ -1,10 +1,7 @@
 import { UserData } from '@/dtos/user-data';
-// import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
-// import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
 import { RegisterUser } from '@/usecases/register-user/register-user';
 import { SendEmailToUserWithBonus } from '@/usecases/send-email-to-user-with-bonus/send-email-to-user-with-bonus';
 import { ControllerError } from '@/web-controllers/errors/controller-error';
-// import { MissingParamError } from '@/web-controllers/errors/missing-param-error';
 import { HttpRequest } from '@/web-controllers/ports/http-request';
 import { HttpResponse } from '@/web-controllers/ports/http-response';
 import { RegisterUserController } from '@/web-controllers/register-user-controller';

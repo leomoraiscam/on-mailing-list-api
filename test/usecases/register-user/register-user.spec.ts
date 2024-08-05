@@ -3,13 +3,12 @@ import { UserRepository } from '@/usecases/ports/repositories/user-repository';
 import { RegisterUser } from '@/usecases/register-user/register-user';
 import { InMemoryUserRepository } from '@test/doubles/repositories/in-memory-user-repository';
 
-const mockLoggerService = {
-  log: jest.fn(),
-};
-
-describe('Register user on mailing list use case', () => {
+describe('RegisterUserUseCase', () => {
   let userRepository: UserRepository;
   let registerUser: RegisterUser;
+  const mockLoggerService = {
+    log: jest.fn(),
+  };
   const user: UserData = {
     name: 'Jayden Mack',
     email: 'ita@odon.lt',
@@ -31,7 +30,10 @@ describe('Register user on mailing list use case', () => {
   });
 
   it('should be able to return user when the same already exist', async () => {
-    jest.spyOn(userRepository, 'exists').mockResolvedValueOnce(true);
+    jest.spyOn(userRepository, 'findByEmail').mockResolvedValueOnce({
+      name: 'any name',
+      email: 'any email',
+    });
 
     await registerUser.perform(user);
 

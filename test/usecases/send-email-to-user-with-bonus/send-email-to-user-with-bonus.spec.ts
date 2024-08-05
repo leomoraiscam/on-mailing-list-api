@@ -6,11 +6,11 @@ import { mailOptions, emailData } from '@test/doubles/stubs/email-options-stub';
 import { MailServiceErrorStub } from '@test/doubles/stubs/mail-service-error-stub';
 import { MailServiceStub } from '@test/doubles/stubs/mail-service-stub';
 
-const mockLoggerService = {
-  log: jest.fn(),
-};
+describe('SendEmailToUserWithBonusUseCase', () => {
+  const mockLoggerService = {
+    log: jest.fn(),
+  };
 
-describe('Send email Use Case', () => {
   it('should be able send email when received valid name and email address', async () => {
     const mailServiceStub = new MailServiceStub();
     const sendEmailToUserWithBonus = new SendEmailToUserWithBonus(
