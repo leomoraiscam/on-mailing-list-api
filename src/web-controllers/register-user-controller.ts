@@ -27,15 +27,13 @@ export class RegisterUserController {
   }
 
   async handle(
-    request: HttpRequest<UserData | Partial<UserData>>
-  ): Promise<HttpResponse<UserData | ControllerError | Error>> {
+    request: HttpRequest<UserData>
+  ): Promise<HttpResponse<UserData | ControllerError>> {
     try {
       if (!request.body.name || !request.body.email) {
         const missing = !request.body.name ? 'name' : 'email';
 
-        return badRequest<ControllerError>(
-          new MissingParamError(missing.trim())
-        );
+        return badRequest(new MissingParamError(missing.trim()));
       }
 
       const user: UserData = {
@@ -54,13 +52,13 @@ export class RegisterUserController {
         const error = sendEmailResponse.value;
 
         if (error.name === MailServiceError.name) {
-          return failDependency<ControllerError>(sendEmailResponse.value);
+          return failDependency(sendEmailResponse.value);
         }
       }
 
       return created<UserData>(registerUserResponse.value);
     } catch (error) {
-      return serverError<ControllerError>(error);
+      return serverError(error);
     }
   }
 }
