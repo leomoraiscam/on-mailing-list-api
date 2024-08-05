@@ -3,9 +3,9 @@ import { UserData } from '@/dtos/user-data';
 import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
 import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
 import { User } from '@/entities/user/user';
-import { LoggerService } from '@/external/logger-services/ports/logger-service';
-import { EmailService } from '@/external/mail-services/ports/email-service';
 import { Either, left, right } from '@/shared/either';
+import { LoggerProvider } from '@/usecases/ports/providers/logger/logger-provider';
+import { EmailProvider } from '@/usecases/ports/providers/mail/mail-provider';
 
 import { MailServiceError } from '../errors/mail-service-error';
 import { UseCase } from '../ports/services/use-case';
@@ -14,13 +14,13 @@ export class SendEmailToUserWithBonus
   implements UseCase<UserData, Either<MailServiceError, EmailOptions>>
 {
   private readonly emailOptions: EmailOptions;
-  private readonly emailService: EmailService;
-  private readonly loggerService: LoggerService;
+  private readonly emailService: EmailProvider;
+  private readonly loggerService: LoggerProvider;
 
   constructor(
     emailOptions: EmailOptions,
-    emailService: EmailService,
-    loggerService: LoggerService
+    emailService: EmailProvider,
+    loggerService: LoggerProvider
   ) {
     this.emailOptions = emailOptions;
     this.emailService = emailService;

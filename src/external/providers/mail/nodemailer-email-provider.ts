@@ -1,16 +1,15 @@
 import * as nodemailer from 'nodemailer';
 
 import { EmailOptions } from '@/dtos/email-options';
-import { EmailService } from '@/external/mail-services/ports/email-service';
 import { Either, left, right } from '@/shared/either';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
+import { LoggerProvider } from '@/usecases/ports/providers/logger/logger-provider';
+import { EmailProvider } from '@/usecases/ports/providers/mail/mail-provider';
 
-import { LoggerService } from '../logger-services/ports/logger-service';
+export class NodemailerEmailProvider implements EmailProvider {
+  private readonly loggerService: LoggerProvider;
 
-export class NodemailerEmailService implements EmailService {
-  private readonly loggerService: LoggerService;
-
-  constructor(loggerService: LoggerService) {
+  constructor(loggerService: LoggerProvider) {
     this.loggerService = loggerService;
   }
 
@@ -38,7 +37,7 @@ export class NodemailerEmailService implements EmailService {
 
       this.loggerService.log(
         'log',
-        `[${NodemailerEmailService.name}]: Message sent to ${options.to}`,
+        `[${NodemailerEmailProvider.name}]: Message sent to ${options.to}`,
         {
           messageId: info.messageId,
         }
@@ -46,7 +45,7 @@ export class NodemailerEmailService implements EmailService {
     } catch (error) {
       this.loggerService.log(
         'error',
-        `[${NodemailerEmailService.name}]: Message sent failed - ${error.message}`,
+        `[${NodemailerEmailProvider.name}]: Message sent failed - ${error.message}`,
         {
           messageId: JSON.stringify(error),
         }

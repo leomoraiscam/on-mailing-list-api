@@ -10,7 +10,7 @@ import {
   created,
   failDependency,
   serverError,
-} from './helper/http-helper';
+} from './helpers/http-helper';
 import { HttpRequest } from './ports/http-request';
 import { HttpResponse } from './ports/http-response';
 

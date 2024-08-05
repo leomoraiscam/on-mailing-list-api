@@ -2,10 +2,10 @@ import { UserData } from '@/dtos/user-data';
 import { InvalidEmailError } from '@/entities/user/errors/invalid-email-error';
 import { InvalidNameError } from '@/entities/user/errors/invalid-name-error';
 import { User } from '@/entities/user/user';
-import { LoggerService } from '@/external/logger-services/ports/logger-service';
 import { Either, left, right } from '@/shared/either';
 import { UserRepository } from '@/usecases/ports/repositories/user-repository';
 
+import { LoggerProvider } from '../ports/providers/logger/logger-provider';
 import { UseCase } from '../ports/services/use-case';
 
 export class RegisterUser
@@ -13,11 +13,11 @@ export class RegisterUser
     UseCase<UserData, Either<InvalidNameError | InvalidEmailError, UserData>>
 {
   private readonly userRepository: UserRepository;
-  private readonly loggerService: LoggerService;
+  private readonly loggerService: LoggerProvider;
 
   public constructor(
     userRepository: UserRepository,
-    loggerService: LoggerService
+    loggerService: LoggerProvider
   ) {
     this.userRepository = userRepository;
     this.loggerService = loggerService;

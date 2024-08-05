@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import request from 'supertest';
 
-import { mongoHelper } from '@/external/repositories/mongodb/helpers/mongo-helper';
+import { mongoHelper } from '@/external/database/mongodb/helpers/mongo-helper';
 import app from '@/main/config/app';
 
 describe('Register Router', () => {

@@ -1,8 +1,8 @@
 import winston, { createLogger, Logger } from 'winston';
 
-import { LoggerService } from './ports/logger-service';
+import { LoggerProvider } from '@/usecases/ports/providers/logger/logger-provider';
 
-export class WinstonLoggerService implements LoggerService {
+export class WinstonLoggerProvider implements LoggerProvider {
   private logger: Logger;
 
   log(level: string, message: string, metadata?: object): void {

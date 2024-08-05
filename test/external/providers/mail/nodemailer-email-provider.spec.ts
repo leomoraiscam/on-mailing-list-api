@@ -1,4 +1,4 @@
-import { NodemailerEmailService } from '@/external/mail-services/nodemailer-email-service';
+import { NodemailerEmailProvider } from '@/external/providers/mail/nodemailer-email-provider';
 import { MailServiceError } from '@/usecases/errors/mail-service-error';
 import { mailOptions } from '@test/doubles/stubs/email-options-stub';
 
@@ -13,11 +13,11 @@ jest.mock('nodemailer', () => ({
   })),
 }));
 
-let nodemailerEmailService: NodemailerEmailService;
+let nodemailerEmailService: NodemailerEmailProvider;
 
 describe('Nodemailer mail service external adapter', () => {
   beforeEach(() => {
-    nodemailerEmailService = new NodemailerEmailService(mockLoggerService);
+    nodemailerEmailService = new NodemailerEmailProvider(mockLoggerService);
   });
 
   afterEach(() => {
