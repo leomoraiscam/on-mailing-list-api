@@ -1,12 +1,11 @@
 import { User } from '@/entities/user/user';
 
-describe('User Domain Entity', () => {
+describe('User domain entity', () => {
   it('should create user with valid data', () => {
     const userOrError = User.create({
       name: 'Charlotte Johnson',
       email: 'sot@pub.ck',
     });
-
     const user = userOrError.value as User;
 
     expect(user.name.value).toEqual('Charlotte Johnson');
@@ -15,12 +14,10 @@ describe('User Domain Entity', () => {
 
   it('should not create user with invalid email address', () => {
     const invalidEmail = 'local_domain.com';
-
     const userOrError = User.create({
       name: 'Stephen Pearson',
       email: invalidEmail,
     });
-
     const error = userOrError.value as Error;
 
     expect(error.name).toEqual('InvalidEmailError');
@@ -29,12 +26,10 @@ describe('User Domain Entity', () => {
 
   it('should not create user with invalid name (too few characters)', () => {
     const invalidName = 'l       ';
-
     const userOrError = User.create({
       name: invalidName,
       email: 'egzeelu@far.be',
     });
-
     const error = userOrError.value as Error;
 
     expect(error.name).toEqual('InvalidNameError');
@@ -43,12 +38,10 @@ describe('User Domain Entity', () => {
 
   it('should not create user with invalid name (too many characters)', () => {
     const invalid_name = 'l'.repeat(257);
-
     const userOrError = User.create({
       name: invalid_name,
       email: 'sakuta@pad.nu',
     });
-
     const error = userOrError.value as Error;
 
     expect(error.name).toEqual('InvalidNameError');
