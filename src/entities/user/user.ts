@@ -8,23 +8,22 @@ import { Name } from './name';
 
 export class User {
   private readonly _email: Email;
-
   private readonly _name: Name;
 
-  constructor(name: Name, email: Email) {
+  public constructor(name: Name, email: Email) {
     this._email = email;
     this._name = name;
   }
 
-  get name(): Name {
+  public get name(): Name {
     return this._name;
   }
 
-  get email(): Email {
+  public get email(): Email {
     return this._email;
   }
 
-  static create(
+  public static create(
     userData: UserData
   ): Either<InvalidNameError | InvalidEmailError, User> {
     const nameOrError: Either<InvalidNameError, Name> = Name.create(
