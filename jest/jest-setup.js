@@ -6,6 +6,6 @@ const config = require('../jest.config');
 config.moduleNameMapper = pathsToModuleNameMapper(compilerOptions.paths, {
   prefix: '<rootDir>/..',
 });
-config.roots = ['../tests'];
+config.roots = ['../test'];
 
 module.exports = config;

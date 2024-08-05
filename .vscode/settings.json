@@ -5,7 +5,7 @@
     "**/.vscode": false,
     "node_modules": true,
     ".husky": true,
-    "jest": true,
+    "jest": false,
     "dist": true,
     "coverage": true,
     "requirements": true
