@@ -9,16 +9,16 @@ import { InMemoryUserRepository } from '@test/doubles/repositories/in-memory-use
 import { mailOptions } from '@test/doubles/stubs/email-options-stub';
 import { MailServiceStub } from '@test/doubles/stubs/mail-service-stub';
 
-let inMemoryUserRepository: InMemoryUserRepository;
-let registerUser: RegisterUser;
-let sendEmailToUserWithBonus: SendEmailToUserWithBonus;
-let registerUserController: RegisterUserController;
-let mailServiceStub: MailServiceStub;
-const mockLoggerService = {
-  log: jest.fn(),
-};
-
 describe('Register user web controller', () => {
+  let inMemoryUserRepository: InMemoryUserRepository;
+  let registerUser: RegisterUser;
+  let sendEmailToUserWithBonus: SendEmailToUserWithBonus;
+  let registerUserController: RegisterUserController;
+  let mailServiceStub: MailServiceStub;
+  const mockLoggerService = {
+    log: jest.fn(),
+  };
+
   beforeEach(() => {
     mailServiceStub = new MailServiceStub();
     inMemoryUserRepository = new InMemoryUserRepository();
@@ -80,10 +80,10 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 400 when request is missing user name', async () => {
-    const requestMissingName: HttpRequest<Partial<UserData>> = {
+    const requestMissingName = {
       body: {
         email: 'mo@ebe.cf',
-      },
+      } as UserData,
     };
 
     const response: HttpResponse<UserData | ControllerError> =
@@ -97,10 +97,10 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 400 when request is missing user email', async () => {
-    const requestMissingEmail: HttpRequest<Partial<UserData>> = {
+    const requestMissingEmail = {
       body: {
         name: 'Leo Abbott',
-      },
+      } as UserData,
     };
 
     const response: HttpResponse<UserData | ControllerError> =
@@ -114,12 +114,13 @@ describe('Register user web controller', () => {
   });
 
   it('should return status code 400 when request is missing user name and email', async () => {
-    const requestMissingNameAndEmail: HttpRequest<Partial<UserData>> = {
-      body: {},
+    const requestMissingNameAndEmail = {
+      body: {} as UserData,
     };
 
-    const response: HttpResponse<Partial<UserData> | ControllerError> =
-      await registerUserController.handle(requestMissingNameAndEmail);
+    const response = await registerUserController.handle(
+      requestMissingNameAndEmail
+    );
 
     expect(response.statusCode).toEqual(400);
     expect(response.body.name).toEqual('MissingParamError');
@@ -140,12 +141,12 @@ describe('Register user web controller', () => {
       .spyOn(registerUser, 'perform')
       .mockImplementationOnce(() => {
         throw Error();
-      }) as any;
+      }) as never;
     const errorThrowingSendEmailToUserWithBonusUseCaseStub = jest
       .spyOn(sendEmailToUserWithBonus, 'perform')
       .mockImplementationOnce(() => {
         throw Error();
-      }) as any;
+      }) as never;
 
     const controller = new RegisterUserController(
       errorThrowingRegisterUserUseCaseStub,
